@@ -31,15 +31,12 @@ public:
 
     // Operations
     Matrix transpose(); //naive algorithm, O(n²)
-    Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, double c, double s);
-
 
     Matrix operator+(Matrix m);
     Matrix operator-(Matrix m);
     Matrix operator*(Matrix m); // naive algorithm, O(n³)
 
     Matrix operator*(double d);
-
 
 private:
     unsigned n; // number of lines

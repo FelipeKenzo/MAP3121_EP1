@@ -327,3 +327,14 @@ Matrix Matrix::operator*(double d)
 
     return mult;
 }
+
+Matrix Matrix::rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, double c, double s)
+{
+    double aux;
+
+    for (unsigned it = 0; it < n; it++){
+        aux = c * w.getValue(i, it) - s * w.getValue(j, it);
+        w.setValue(j, it, s * w.getValue(i,it) + c * w.getValue(j, it));
+        w.setValue(i, it, aux);
+    }
+}
