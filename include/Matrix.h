@@ -36,6 +36,8 @@ public:
     Matrix operator-(Matrix m);
     Matrix operator*(Matrix m); // naive algorithm, O(n³)
 
+    Matrix operator*(double d);
+
 private:
     unsigned n; // number of lines
     unsigned m; // number of columns

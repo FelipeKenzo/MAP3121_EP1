@@ -314,3 +314,16 @@ Matrix Matrix::operator*(Matrix m)
     
     return mult;
 }
+
+Matrix Matrix::operator*(double d)
+{
+    Matrix mult(n, m);
+
+    for (unsigned i = 0; i < n; i++) {
+        for (unsigned j = 0; j < m; j++) {
+            mult.setValue(i, j, values[i][j] * d);
+        }
+    }
+
+    return mult;
+}
