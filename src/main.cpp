@@ -2,20 +2,17 @@
 #include "Matrix.h"
 
 int main() {
-    Matrix m1(2, 3);
-    Matrix m2(3, 4, 2);
-    Matrix m3(4, 3, 3);
+    Matrix m1(3, 4, 1);
+    Matrix m2(3, 4, 22);
+    Matrix m3(3, 4, 333);
+
+    std::vector<double> a = {1, 1, 1, 1};
 
     m1.print();
     m2.print();
     m3.print();
 
-    std::vector<double> row = {3, 4, 2, 1};
-    m1.setRow(2, row);
+    m2.setRow(1, a);
 
-    m1.print();
-
-    Matrix* m4 = m1.transpose();
-
-    m4->print();
+    m2.print();
 }

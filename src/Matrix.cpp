@@ -1,4 +1,4 @@
-#include "Matrix.h";
+#include "Matrix.h"
 
 Matrix::Matrix(unsigned n, unsigned m) :
     n(n), m(m)
@@ -64,37 +64,80 @@ void Matrix::print()
     if (m < 1 || n < 1)
         throw new std::length_error("Dimensional error");
 
-    // column indexes
-    std::cout << "\n       1";
-
-    for (unsigned i = 2; i <= m; i++)
+    unsigned msd = 0;
+    for (unsigned i = 0; i < n; i++)
     {
+        for (unsigned j = 0; j < m; j++)
+        {
+            unsigned base10 = 0;
+            int aux = values[i][j];
+            while (aux > 0)
+            {
+                aux = aux/10;
+                if (aux != 0)
+                {
+                    base10++;
+                }
+            }
+
+            if (base10 > msd)
+            {
+                msd = base10;
+            }
+        }
+    }
+
+    // column indexes
+    std::cout << "\n       0";
+
+    for (unsigned i = 1; i < m; i++)
+    {
+        for (unsigned j = 0; j < msd; j++)
+        {
+            std::cout << " ";
+        }
         std::cout << "     " << i;
     }
 
     //upper border
     std::cout << "\n    ";
-    
+
     for (unsigned i = 0; i < m; i++)
     {
+        for (unsigned j = 0; j < msd; j++)
+        {
+            std::cout << "-";
+        }
+
         std::cout << "------";
     }
 
     std::cout << "\n";
 
     // row indexes and actual values
-    for (unsigned i = 1; i <= n; i++)
+    for (unsigned i = 0; i < n; i++)
     {
         std::cout << "  " << i << "|";
 
         for (unsigned j = 0; j < m; j++)
         {
-            std::cout << " " << std::fixed << std::setprecision(2) << values[i-1][j] << " ";
+            std::cout << " ";
+
+            if (values[i][j]/10 < msd){
+                for (unsigned k = 0; k < msd-values[i][j]/10; k++)
+                {
+                    std::cout << " ";
+                }
+            }
+            
+            std::cout << std::fixed
+                      << std::setprecision(2) 
+                      << values[i][j] << " ";
         }
 
         std::cout << "|";
 
-        if (i != n)
+        if (i != n-1)
         {
             std::cout << "\n";
         }
@@ -105,6 +148,10 @@ void Matrix::print()
 
     for (unsigned i = 0; i < m; i++)
     {
+        for (unsigned j = 0; j < msd; j++)
+        {
+            std::cout << "-";
+        }
         std::cout << "------";
     }
     
@@ -139,9 +186,17 @@ void Matrix::setRow(unsigned n, std::vector<double> newRow)
     }
 }
 
-void Matrix::setColumn(unsigned n, std::vector<double> newColumn)
+void Matrix::setColumn(unsigned m, std::vector<double> newColumn)
 {
+    if (newColumn.size() != n)
+    {
+        throw new std::invalid_argument("Dimensional error");
+    }
 
+    for (unsigned i = 0; i < n; i++)
+    {
+        values[i][m] = newColumn[i];
+    }
 }
 
 double Matrix::getValue(unsigned n, unsigned m)
@@ -181,18 +236,19 @@ unsigned Matrix::getColumnDimension()
     return m;
 }
 
-Matrix* Matrix::transpose()
+Matrix Matrix::transpose()
 {
-    Matrix* transposed = new Matrix(m, n);
+    Matrix transposed(m, n);
 
     for (unsigned i = 0; i < n; i++)
     {
         for (unsigned j = 0; j < m; j++)
         {
-            std::cout << i << ", " << j << std::endl;
-            transposed->setValue(j, i, values[i][j]);
+            transposed.setValue(j, i, values[i][j]);
         }
     }
+
+    return transposed;
 }
 
 Matrix Matrix::operator+(Matrix M)
@@ -251,6 +307,8 @@ Matrix Matrix::operator*(Matrix m)
             {
                 sum += values[i][k] * m.getValue(i, j);
             }
+
+            mult.setValue(i, j, sum);
         }
     }
     
