@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <iomanip>
+#include <math.h>
 
 class Matrix
 {
@@ -31,12 +32,16 @@ public:
 
     // Operations
     Matrix transpose(); //naive algorithm, O(n²)
+    std::vector<double> getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k); // Return cos and sin Givens rot. parameters
+    Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, double c, double s);
+
 
     Matrix operator+(Matrix m);
     Matrix operator-(Matrix m);
     Matrix operator*(Matrix m); // naive algorithm, O(n³)
 
     Matrix operator*(double d);
+
 
 private:
     unsigned n; // number of lines
