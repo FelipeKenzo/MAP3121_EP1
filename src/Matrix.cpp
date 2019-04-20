@@ -70,7 +70,7 @@ void Matrix::print()
         for (unsigned j = 0; j < m; j++)
         {
             unsigned base10 = 0;
-            int aux = values[i][j];
+            int aux = fabs(values[i][j]);
             while (aux > 0)
             {
                 aux = aux/10;
@@ -122,11 +122,23 @@ void Matrix::print()
         for (unsigned j = 0; j < m; j++)
         {
             std::cout << " ";
-
-            if (values[i][j]/10 < msd){
-                for (unsigned k = 0; k < msd-values[i][j]/10; k++)
+            
+            //std::cout << values[i][j]/pow(10, msd) << "\n";
+            if (values[i][j]/pow(10, msd) < 1){
+                unsigned base10 = 0;
+                int aux = fabs(values[i][j]);
+                while (aux > 0)
                 {
-                    std::cout << " ";
+                    aux = aux/10;
+                    if (aux != 0)
+                    {
+                        base10++;
+                    }
+                }
+                
+                for (base10 = msd - base10; base10 > 0; base10--)
+                {
+                    std::cout << "0";
                 }
             }
             
