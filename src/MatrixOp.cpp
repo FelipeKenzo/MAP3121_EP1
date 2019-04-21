@@ -37,3 +37,24 @@ Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, doubl
 
     return w;
 }
+
+Matrix qrFactorization(Matrix w)
+{
+    double c, s, n, m;
+    unsigned i, j;
+
+    n = w.getColumnDimension();
+    m = w.getRowDimension();
+
+    for(unsigned k = 1; k <= m; k++){
+        for(j = n; j >= k+1; k--){
+            i = j - 1;
+            if(w.getValue(j, k) != 0){
+                c = (getRGParameters(w, i, j, k))[0];
+                s = (getRGParameters(w, i, j, k))[1];
+                w = rotGivens(w, n, m, i, j, c, s);
+            }
+        }
+    }
+    return w;
+}
