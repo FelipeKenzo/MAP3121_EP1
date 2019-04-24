@@ -22,7 +22,7 @@ public:
     void setColumn(unsigned m, std::vector<double> newColumn);
     void setValues(std::vector<std::vector<double>> newValues);
     
-    double getValue(unsigned n, unsigned m);
+    double at(unsigned n, unsigned m);
     std::vector<double> getRow(unsigned n);
     std::vector<double> getColumn(unsigned m);
     std::vector<std::vector<double>> getValues();

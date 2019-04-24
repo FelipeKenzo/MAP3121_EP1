@@ -8,11 +8,11 @@
 #include "Matrix.h"
 
     /** Returns cos and sin parameters used in Givens rotation linear operator **/
-    std::vector<double> getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k); 
+    double* getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k); 
     
     Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, double c, double s); 
 
-    /** Returns R matrix produced by QR factorization *//
+    /** Returns R matrix produced by QR factorization */
     Matrix qrFactorization(Matrix w);
 
 #endif

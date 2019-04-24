@@ -1,20 +1,20 @@
 #include "MatrixOp.h"
 
 
-std::vector<double> getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k)
+double* getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k)
 {
     if(i > (w.getRowDimension() - 1 )|| j > (w.getColumnDimension() - 1) )
        throw new std::range_error("Input values i, j are out of range");
 
     double tal, c, s;  
-    std::vector<double> rgParameters;  
+    static double rgParameters[2];  
 
-    if(  abs(w.getValue(i,k)) > abs(w.getValue(j,k)) ){
-        tal = (- w.getValue(j,k)) / w.getValue(i,k);
+    if(  abs(w.at(i,k)) > abs(w.at(j,k)) ){
+        tal = (- w.at(j,k)) / w.at(i,k);
         c = 1 / sqrt(1 + (tal * tal));
         s = c * tal;
     } else{
-        tal = (- w.getValue(i,k)) / w.getValue(j,k);
+        tal = (- w.at(i,k)) / w.at(j,k);
         s = 1 / sqrt(1 + (tal * tal));
         c = s * tal;
     }
@@ -30,8 +30,8 @@ Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, doubl
     double aux;
 
     for (unsigned it = 0; it < n; it++){
-        aux = c * w.getValue(i, it) - s * w.getValue(j, it);
-        w.setValue(j, it, s * w.getValue(i,it) + c * w.getValue(j, it));
+        aux = c * w.at(i, it) - s * w.at(j, it);
+        w.setValue(j, it, s * w.at(i,it) + c * w.at(j, it));
         w.setValue(i, it, aux);
     }
 
@@ -40,21 +40,25 @@ Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, doubl
 
 Matrix qrFactorization(Matrix w)
 {
+
     double c, s, n, m;
     unsigned i, j;
 
     n = w.getColumnDimension();
     m = w.getRowDimension();
 
-    for(unsigned k = 1; k <= m; k++){
-        for(j = n; j >= k+1; k--){
+    Matrix r(w.getValues());
+
+    for(unsigned k = 0; k < m; k++){
+        for(j = n-1; j > k; j--){
             i = j - 1;
-            if(w.getValue(j, k) != 0){
-                c = (getRGParameters(w, i, j, k))[0];
-                s = (getRGParameters(w, i, j, k))[1];
-                w = rotGivens(w, n, m, i, j, c, s);
+            if(r.at(j, k) != 0){
+                double* params = getRGParameters(w, i, j, k);
+                c = params[0];
+                s = params[1];
+                r = rotGivens(r, n, m, i, j, c, s);
             }
         }
     }
-    return w;
+    return r;
 }

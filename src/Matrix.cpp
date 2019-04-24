@@ -88,6 +88,7 @@ void Matrix::print()
     }
 
     // column indexes
+    /*
     std::cout << "\n       0";
 
     for (unsigned i = 1; i < m; i++)
@@ -112,12 +113,14 @@ void Matrix::print()
         std::cout << "------";
     }
 
+    */
     std::cout << "\n";
 
     // row indexes and actual values
     for (unsigned i = 0; i < n; i++)
     {
-        std::cout << "  " << i << "|";
+        //std::cout << "  " << i << "|";
+        std::cout << "|";
 
         for (unsigned j = 0; j < m; j++)
         {
@@ -143,7 +146,7 @@ void Matrix::print()
             }
             
             std::cout << std::fixed
-                      << std::setprecision(2) 
+                      << std::setprecision(6) 
                       << values[i][j] << " ";
         }
 
@@ -155,6 +158,7 @@ void Matrix::print()
         }
     }
 
+    /*
     //lower border
     std::cout << "\n    ";
 
@@ -166,6 +170,7 @@ void Matrix::print()
         }
         std::cout << "------";
     }
+    */
     
     std::cout << "\n\n";
 }
@@ -211,7 +216,7 @@ void Matrix::setColumn(unsigned m, std::vector<double> newColumn)
     }
 }
 
-double Matrix::getValue(unsigned n, unsigned m)
+double Matrix::at(unsigned n, unsigned m)
 {
     return values[n][m];
 }
@@ -276,7 +281,7 @@ Matrix Matrix::operator+(Matrix M)
     {
         for (unsigned j = 0; j < m; j++)
         {
-            sum.setValue(i, j, values[i][j] + M.getValue(i, j));
+            sum.setValue(i, j, values[i][j] + M.at(i, j));
         }
     }
 
@@ -296,7 +301,7 @@ Matrix Matrix::operator-(Matrix M)
     {
         for (unsigned j = 0; j < m; j++)
         {
-            sub.setValue(i, j, values[i][j] - M.getValue(i, j));
+            sub.setValue(i, j, values[i][j] - M.at(i, j));
         }
     }
 
@@ -319,7 +324,7 @@ Matrix Matrix::operator*(Matrix m)
             double sum = 0;
             for (unsigned k = 0; k < this->m; k++)
             {
-                sum += values[i][k] * m.getValue(i, j);
+                sum += values[i][k] * m.at(i, j);
             }
 
             mult.setValue(i, j, sum);
