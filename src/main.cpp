@@ -15,10 +15,10 @@ int main() {
     Matrix m1(m_values);
     m1.print();
 
-    std::cout << "QR Factorization: ";
+    std::cout << "Rot Givens (3,4) ";
 
     try {
-    rotGivens(m1, 5, 5, 3, 4, 2 / sqrt(5), 1 / sqrt(5)).print();
+    rotGivens(m1, 5, 5, 4, 3, 2 / sqrt(5), 1 / sqrt(5)).print();
     } catch (std::range_error* e) {
         std::cout << "Error: " << e->what() << "\n";
     }
