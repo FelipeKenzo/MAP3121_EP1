@@ -18,7 +18,7 @@ int main() {
     std::cout << "QR Factorization: ";
 
     try {
-    qrFactorization(m1).print();
+    rotGivens(m1, 5, 5, 3, 4, 2 / sqrt(5), 1 / sqrt(5)).print();
     } catch (std::range_error* e) {
         std::cout << "Error: " << e->what() << "\n";
     }

@@ -29,8 +29,8 @@ Matrix rotGivens(Matrix w, unsigned n, unsigned m, unsigned i, unsigned j, doubl
 {
     double aux;
 
-    for (unsigned it = 0; it < n; it++){
-        aux = c * w.at(i, it) - s * w.at(j, it);
+    for (unsigned it = 1; it <= n; it++){
+        aux = c * (w.at(i, it)) - (s * w.at(j, it));
         w.setValue(j, it, s * w.at(i,it) + c * w.at(j, it));
         w.setValue(i, it, aux);
     }
