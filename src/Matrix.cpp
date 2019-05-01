@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#define eps 1e-6
 
 Matrix::Matrix(unsigned n, unsigned m) :
     n(n), m(m)
@@ -124,7 +125,6 @@ void Matrix::print()
 
         for (unsigned j = 0; j < m; j++)
         {
-            std::cout << " ";
             
             //std::cout << values[i][j]/pow(10, msd) << "\n";
             if (values[i][j]/pow(10, msd) < 1){
@@ -144,10 +144,20 @@ void Matrix::print()
                     std::cout << "0";
                 }
             }
-            
-            std::cout << std::fixed
-                      << std::setprecision(6) 
-                      << values[i][j] << " ";
+
+
+            if (fabs(values[i][j]) < eps) {
+                //std::cout << fabs(values[i][j]) << " eh zero.\n";
+                std::cout << " 0.000000 ";    
+            }
+            else {
+                if (values[i][j] > 0 || abs(values[i][j]) < eps) {
+                    std::cout << " ";
+                }
+                std::cout << std::fixed
+                        << std::setprecision(6) 
+                        << values[i][j] << " ";
+            }
         }
 
         std::cout << "|";
