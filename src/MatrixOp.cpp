@@ -55,9 +55,10 @@ Matrix qrFactorization(Matrix w)
             i = j - 1;
             if(fabs(r.at(j, k)) > eps){
                 std::cout << "rotGivens para zerar r(" << j << ", " << k << ")\n";
-                double* params = getRGParameters(w, i, j, k);
+                double* params = getRGParameters(r, i, j, k);
                 c = params[0];
                 s = params[1];
+                std::cout << "parametros: c = " << c << ", s = " << s <<"\n";
                 r = rotGivens(r, n, m, i, j, c, s);
                 r.print();
             }
