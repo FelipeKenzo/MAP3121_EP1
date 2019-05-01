@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "Matrix.h"
 #include "MatrixOp.h"
 
@@ -13,12 +14,14 @@ int main() {
     std::vector<std::vector<double>> m_values = {a, b, c, d, e};
 
     Matrix m1(m_values);
-    m1.print();
 
     std::cout << "Rot Givens (3,4) ";
 
     try {
+
     rotGivens(m1, 5, 5, 4, 3, 2 / sqrt(5), 1 / sqrt(5)).print();
+    qrFactorization(m1);
+
     } catch (std::range_error* e) {
         std::cout << "Error: " << e->what() << "\n";
     }
