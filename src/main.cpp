@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "Matrix.h"
 #include "MatrixOp.h"
 
@@ -13,12 +14,11 @@ int main() {
     std::vector<std::vector<double>> m_values = {a, b, c, d, e};
 
     Matrix m1(m_values);
-    m1.print();
 
     std::cout << "QR Factorization: ";
 
     try {
-    qrFactorization(m1).print();
+    qrFactorization(m1);
     } catch (std::range_error* e) {
         std::cout << "Error: " << e->what() << "\n";
     }
