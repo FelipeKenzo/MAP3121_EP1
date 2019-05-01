@@ -14,12 +14,14 @@ int main() {
     std::vector<std::vector<double>> m_values = {a, b, c, d, e};
 
     Matrix m1(m_values);
+    double cos = 2 / sqrt(5);
+    double sin = 1 / sqrt(5);
 
-    std::cout << "Rot Givens (3,4) ";
+    std::cout << "Rot Givens zerando (4,3) ";
 
     try {
 
-    rotGivens(m1, 5, 5, 4, 3, 2 / sqrt(5), 1 / sqrt(5)).print();
+    rotGivens(m1, 5, 5, 2, 3, cos, sin).print();
     qrFactorization(m1);
 
     } catch (std::range_error* e) {
