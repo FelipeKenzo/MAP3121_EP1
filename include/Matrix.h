@@ -27,8 +27,8 @@ public:
     std::vector<double> getColumn(unsigned m);
     std::vector<std::vector<double>> getValues();
 
-    unsigned getRowDimension();
-    unsigned getColumnDimension();
+    unsigned getNumberOfLines();
+    unsigned getNumberOfColumns();
 
     // Operations
     Matrix transpose(); //naive algorithm, O(n²)

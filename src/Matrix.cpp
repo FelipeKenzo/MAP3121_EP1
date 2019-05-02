@@ -126,8 +126,12 @@ void Matrix::print()
         for (unsigned j = 0; j < m; j++)
         {
             
+                if (values[i][j] > 0 || abs(values[i][j]) < eps) {
+                    std::cout << " ";
+                }
+
             //std::cout << values[i][j]/pow(10, msd) << "\n";
-            if (values[i][j]/pow(10, msd) < 1){
+            if (fabs(values[i][j])/pow(10, msd) < 1){
                 unsigned base10 = 0;
                 int aux = fabs(values[i][j]);
                 while (aux > 0)
@@ -148,12 +152,9 @@ void Matrix::print()
 
             if (fabs(values[i][j]) < eps) {
                 //std::cout << fabs(values[i][j]) << " eh zero.\n";
-                std::cout << " 0.000000 ";    
+                std::cout << "0.000000 ";    
             }
             else {
-                if (values[i][j] > 0 || abs(values[i][j]) < eps) {
-                    std::cout << " ";
-                }
                 std::cout << std::fixed
                         << std::setprecision(6) 
                         << values[i][j] << " ";
@@ -189,6 +190,7 @@ void Matrix::setValue(unsigned n, unsigned m, double newValue)
 {
     if (n > this->n || m > this->m)
     {
+        std::cout << "Erro acessando w[" << n << "][" << m << "]\n";
         throw new std::range_error("Invalid index");
     }
 
@@ -253,12 +255,12 @@ std::vector<std::vector<double>> Matrix::getValues()
     return values;
 }
 
-unsigned Matrix::getRowDimension()
+unsigned Matrix::getNumberOfLines()
 {
     return n;
 }
 
-unsigned Matrix::getColumnDimension()
+unsigned Matrix::getNumberOfColumns()
 {
     return m;
 }
@@ -282,7 +284,7 @@ Matrix Matrix::transpose()
 
 Matrix Matrix::operator+(Matrix M)
 {
-    if (M.getRowDimension() != n || M.getColumnDimension() != m)
+    if (M.getNumberOfLines() != n || M.getNumberOfColumns() != m)
         throw new std::invalid_argument("incompatible dimensions");
 
     Matrix sum(n, m);// = new Matrix(n, m);
@@ -300,7 +302,7 @@ Matrix Matrix::operator+(Matrix M)
     
 Matrix Matrix::operator-(Matrix M)
 {
-    if (M.getRowDimension() != n || M.getColumnDimension() != m)
+    if (M.getNumberOfLines() != n || M.getNumberOfColumns() != m)
     {
         throw new std::invalid_argument("incompatible dimensions");
     }
@@ -320,16 +322,16 @@ Matrix Matrix::operator-(Matrix M)
 
 Matrix Matrix::operator*(Matrix m)
 {
-    if (this->m != m.getRowDimension())
+    if (this->m != m.getNumberOfLines())
     {
         throw new std::invalid_argument("incompatible dimensions");
     }
 
-    Matrix mult(n, m.getColumnDimension());//= new Matrix (n, m->getColumnDimension());
+    Matrix mult(n, m.getNumberOfColumns());
     
-    for (unsigned i = 0; i < mult.getRowDimension(); i++)
+    for (unsigned i = 0; i < mult.getNumberOfLines(); i++)
     {
-        for (unsigned j = 0; j < mult.getColumnDimension(); j++)
+        for (unsigned j = 0; j < mult.getNumberOfColumns(); j++)
         {
             double sum = 0;
             for (unsigned k = 0; k < this->m; k++)

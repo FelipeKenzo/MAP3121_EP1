@@ -15,4 +15,7 @@
     /** Returns R matrix produced by QR factorization */
     Matrix qrFactorization(Matrix w);
 
+    // Returns an R matrix which is the best solution for W * X = B
+    Matrix solveLinearSystems(Matrix w, Matrix b);
+
 #endif
