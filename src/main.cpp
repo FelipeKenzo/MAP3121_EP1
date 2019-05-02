@@ -16,11 +16,20 @@ int main() {
     std::vector<std::vector<double>> m_values = {a, b, c, d, e};
 
     Matrix m1(m_values);
+    double cos = 2 / sqrt(5);
+    double sin = 1 / sqrt(5);
 
+<<<<<<< HEAD
     std::cout << "QR Factorization test: ";
+=======
+    std::cout << "Rot Givens zerando (4,3) ";
+>>>>>>> 48c2b1b9859d73de619b76983b1aa4846ca09fb7
 
     try {
+
+    rotGivens(m1, 5, 5, 2, 3, cos, sin).print();
     qrFactorization(m1);
+
     } catch (std::range_error* e) {
         std::cout << "Error: " << e->what() << "\n";
     }
