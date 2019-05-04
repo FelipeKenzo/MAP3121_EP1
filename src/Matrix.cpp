@@ -126,7 +126,7 @@ void Matrix::print()
         for (unsigned j = 0; j < m; j++)
         {
             
-                if (values[i][j] > 0 || abs(values[i][j]) < eps) {
+                if (values[i][j] > 0 || fabs(values[i][j]) < eps) {
                     std::cout << " ";
                 }
 
@@ -145,7 +145,7 @@ void Matrix::print()
                 
                 for (base10 = msd - base10; base10 > 0; base10--)
                 {
-                    std::cout << "0";
+                    std::cout << " ";
                 }
             }
 
@@ -328,7 +328,7 @@ Matrix Matrix::operator*(Matrix m)
     }
 
     Matrix mult(n, m.getNumberOfColumns());
-    
+
     for (unsigned i = 0; i < mult.getNumberOfLines(); i++)
     {
         for (unsigned j = 0; j < mult.getNumberOfColumns(); j++)
@@ -336,9 +336,10 @@ Matrix Matrix::operator*(Matrix m)
             double sum = 0;
             for (unsigned k = 0; k < this->m; k++)
             {
-                sum += values[i][k] * m.at(i, j);
+                //std::cout << "left[" << i << "][" << k << "] * "
+                //         << "right[" << k << "][" << j << "]\n";
+                sum += values[i][k] * m.at(k, j);
             }
-
             mult.setValue(i, j, sum);
         }
     }
