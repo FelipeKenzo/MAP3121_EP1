@@ -75,7 +75,7 @@ Matrix qrFactorization(Matrix w)
     return r;
 }
 
-Matrix solveLinearSystems(Matrix w, Matrix b) {
+Matrix solveLinearSystems(Matrix w, Matrix b) { //W * x = b
     double c, s;
 
     Matrix r(w.getValues());
@@ -97,20 +97,20 @@ Matrix solveLinearSystems(Matrix w, Matrix b) {
         }
     }
 
-    std::cout << "Matriz R:";
-    r.print();
-    std::cout << "Matriz blinha:";
-    newB.print();
+    //std::cout << "Matriz R:";
+    //r.print();
+    //std::cout << "Matriz blinha:";
+    //newB.print();
 
-    for (int k = int(w.getNumberOfColumns()-1); k >= 0; k--) {
+    for (int k = int(x.getNumberOfLines()-1); k >= 0; k--) {
         for (unsigned j = 0; j < x.getNumberOfColumns(); j++) {
             double aux = 0;
             for (int i = k + 1; i < x.getNumberOfLines(); i++) {
                 //std::cout << "k: " << k << " j: " << j << " i: " << i << "\n";
-                aux += w.at(k, i) * x.at(i, j);
+                aux += r.at(k, i) * x.at(i, j);
             }
-            double x_k = (b.at(k, j) - aux)/w.at(k, k);
-            x.setValue(k, j, x_k);
+            double x_k_j = (newB.at(k, j) - aux)/r.at(k, k);
+            x.setValue(k, j, x_k_j);
         }
     }
 
@@ -123,10 +123,13 @@ Matrix nonNegativeFactorization(Matrix a, unsigned p)
 
     for (unsigned i = 0; i < w.getNumberOfLines(); i++) {
         for (unsigned j = 0; j < w. getNumberOfColumns(); j++) {
-            w.setValue(i, j, rand() % 1 + 9);
+            double random = double(rand() % 9 +1);
+            w.setValue(i, j, random);
         }
     }
 
     if (p < a.getNumberOfColumns() || p < a.getNumberOfLines())
         throw new std::invalid_argument("invalid inner dimension");
+    
+    return w;
 }
