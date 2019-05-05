@@ -124,7 +124,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
     unsigned n = a->getNumberOfLines();
     unsigned m = a->getNumberOfColumns();
 
-    Matrix* w = new Matrix(n, p);
+    Matrix* w  = new Matrix(n, p);
+    Matrix* h  = new Matrix(p, m);
+    Matrix* wt = new Matrix(p, n);
 
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
@@ -133,21 +135,56 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
         }
     }
 
-    Matrix a2(a->getValues()); // temporary object
+    Matrix a2(a->getValues()); // Temporary object
 
     unsigned it = 0;
     unsigned err = 1;
+
     while (it < 100 && err > eps) {
-        // normalization
+
+        a2 = a;
+        /*-------!  Normalização W  !---------*/
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double aux = 0;
+            
             for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
                 aux += w->at(i, j) * w->at(i, j);
             }
             for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
                 w->setValue(i, j, w->at(i, j)/sqrt(aux));
-            }
+            }          
         }
+        /*-----!    MMQ para determinar h     !-----*/
+        h = solveLinearSystems(w, a2);
+
+        /*-----!      Redefinição de h       !------*/
+        for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
+            for(unsigned j = 1; j <= h->getNumberOfColumns(); i++){
+                if(h->at(i, j) < -eps || fabs(h->at(i,j)) < eps){
+                    h->setValue(i, j, 0); 
+                }
+            }                
+        }
+        /*-----! Computação de A transposta  !-----*/
+        a2 = a;
+        a2->transpose();
+
+        /*-----!      MMQ das Transpostas    !-----*/
+        wt = solveLinearSystems(h->transpose(), a2);
+
+        /*-----!      Computação de w        !-----*/
+        w = wt;
+        w->transpose();
+
+        /*-----!     Redefinição de w        !-----*/
+        for (unsigned i = 1; i <= w->getNumberOfLines(); i++){
+            for(unsigned j = 1; j <= w->getNumberOfColumns(); i++){
+                if(w->at(i, j) < -eps || fabs(w->at(i,j)) < eps){
+                    w->setValue(i, j, 0); 
+                }
+            }                
+        }   
+        it++;
     }
 
     return w;
