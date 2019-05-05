@@ -2,9 +2,9 @@
 #define eps 1e-5
 #define itmax 100
 
-double* getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k)
+double* getRGParameters(Matrix* w, unsigned i, unsigned j, unsigned k)
 {
-    if (j > (w.getNumberOfLines() -1) || k > (w.getNumberOfColumns() -1)) {
+    if (j > (w->getNumberOfLines()) || k > (w->getNumberOfColumns())) {
        std::cout << i << " " << j << "\n";
        throw new std::range_error("Input values i, j, k are out of range");
     }
@@ -12,12 +12,12 @@ double* getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k)
     double tau, c, s;
     double* rgParameters = new double[2];  
 
-    if(  abs(w.at(i,k)) > abs(w.at(j,k)) ){
-        tau = -(w.at(j,k) / w.at(i,k));
+    if(  abs(w->at(i,k)) > abs(w->at(j,k)) ){
+        tau = -(w->at(j,k) / w->at(i,k));
         c = 1 / sqrt(1 + (tau * tau));
         s = c * tau;
     } else{
-        tau = -(w.at(i,k) / w.at(j,k));
+        tau = -(w->at(i,k) / w->at(j,k));
         s = 1 / sqrt(1 + (tau * tau));
         c = s * tau;
     }
@@ -28,108 +28,127 @@ double* getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k)
     return rgParameters;
 }
 
-Matrix rotGivens(Matrix w, unsigned i, unsigned j, double c, double s)
+void rotGivens(Matrix* w, unsigned i, unsigned j, double c, double s)
 {
     double aux;
-    unsigned m = w.getNumberOfColumns();
+    unsigned m = w->getNumberOfColumns();
 
-    for (unsigned r = 0; r < m; r++){
+    for (unsigned r = 1; r <= m; r++){
         //std::cout << "Acessando w[" << i << "][" << r
         //          << "] e w[" << j << "][" << r << "]\n";
-        aux = c * w.at(i, r) - s * w.at(j, r);
-        w.setValue(j, r, ((s * w.at(i,r)) + (c * w.at(j, r))));
-        w.setValue(i, r, aux);
+        aux = c * w->at(i, r) - s * w->at(j, r);
+        w->setValue(j, r, ((s * w->at(i,r)) + (c * w->at(j, r))));
+        w->setValue(i, r, aux);
     }
 
-    //std::cout << "rotGivens completo.\n";
-    return w;
+    //std::cout << "rotGivens completo->\n";
+    return;
 }
 
-Matrix qrFactorization(Matrix w)
+void qrFactorization(Matrix* w)
 {
 
     double c, s;
     unsigned n, m, i, j;
 
-    n = w.getNumberOfLines();
-    m = w.getNumberOfColumns();
+    n = w->getNumberOfLines();
+    m = w->getNumberOfColumns();
 
-    Matrix r(w.getValues());
-    r.print();
-
-    for(unsigned k = 0; k < m; k++){
-        for(j = n-1; j > k; j--){
+    for(unsigned k = 1; k <= m; k++){
+        for(j = n; j >= k + 1; j--){
             i = j - 1;
-            if(fabs(r.at(j, k)) > eps){
-                std::cout << "rotGivens para zerar r(" << j << ", " << k << ")\n";
-                double* params = getRGParameters(r, i, j, k);
+            if(fabs(w->at(j, k)) > eps){
+                //std::cout << "rotGivens para zerar r(" << j << ", " << k << ")\n";
+                double* params = getRGParameters(w, i, j, k);
                 c = params[0];
                 s = params[1];
-                std::cout << "parametros: c = " << c << ", s = " << s <<"\n";
-                r = rotGivens(r, i, j, c, s);
+                //std::cout << "parametros: c = " << c << ", s = " << s <<"\n";
+                rotGivens(w, i, j, c, s);
                 delete params;
-                r.print();
+                //w->print();
             }
         }
     }
-    return r;
+    return;
 }
 
-Matrix solveLinearSystems(Matrix w, Matrix b) { //W * x = b
+Matrix* solveLinearSystems(Matrix* w, Matrix* a) { //W * H = A
     double c, s;
 
-    Matrix r(w.getValues());
-    Matrix newB(b.getValues());
-    Matrix x(w.getNumberOfColumns(), b.getNumberOfColumns());
+    unsigned n = w->getNumberOfLines();
+    unsigned m = a->getNumberOfColumns();
+    unsigned p = w->getNumberOfColumns();
 
-    for(unsigned k = 0; k < w.getNumberOfColumns(); k++){
-        for(unsigned j = w.getNumberOfLines()-1; j > k; j--){
+    Matrix* h = new Matrix(p, m);
+
+    for(unsigned k = 1; k <= p; k++){
+        for(unsigned j = n; j >= k + 1; j--){
             unsigned i = j - 1;
             //std::cout << "r[" << j << "][" << k << "]\n";
-            if(fabs(r.at(j, k)) > eps){
-                double* params = getRGParameters(r, i, j, k);
+            if(fabs(w->at(j, k)) > eps){
+                double* params = getRGParameters(w, i, j, k);
                 c = params[0];
                 s = params[1];
-                r = rotGivens(r, i, j, c, s);
-                newB = rotGivens(newB, i, j, c, s);
+                rotGivens(w, i, j, c, s);
+                rotGivens(a, i, j, c, s);
                 delete params;
             }
         }
     }
 
     //std::cout << "Matriz R:";
-    //r.print();
+    //r->print();
     //std::cout << "Matriz blinha:";
-    //newB.print();
+    //newB->print();
 
-    for (int k = int(x.getNumberOfLines()-1); k >= 0; k--) {
-        for (unsigned j = 0; j < x.getNumberOfColumns(); j++) {
+    for (unsigned k = p; k >= 1; k--) {
+        for (unsigned j = 1; j <= m; j++) {
             double aux = 0;
-            for (int i = k + 1; i < x.getNumberOfLines(); i++) {
+            for (unsigned i = k + 1; i <= p; i++) {
                 //std::cout << "k: " << k << " j: " << j << " i: " << i << "\n";
-                aux += r.at(k, i) * x.at(i, j);
+                aux += w->at(k, i) * h->at(i, j);
             }
-            double x_k_j = (newB.at(k, j) - aux)/r.at(k, k);
-            x.setValue(k, j, x_k_j);
+            
+            h->setValue(k, j, (a->at(k, j) - aux)/w->at(k, k));
         }
     }
 
-    return x;
+    return h;
 }
 
-Matrix nonNegativeFactorization(Matrix a, unsigned p)
+Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
 {
-    Matrix w(a.getNumberOfLines(), p);
+    if (p < a->getNumberOfColumns() || p < a->getNumberOfLines())
+        throw new std::invalid_argument("invalid inner dimension");
+    
+    unsigned n = a->getNumberOfLines();
+    unsigned m = a->getNumberOfColumns();
 
-    for (unsigned i = 0; i < w.getNumberOfLines(); i++) {
-        for (unsigned j = 0; j < w. getNumberOfColumns(); j++) {
+    Matrix* w = new Matrix(n, p);
+
+    for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
+        for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
-            w.setValue(i, j, random);
+            w->setValue(i, j, random);
         }
     }
 
-    if (p < a.getNumberOfColumns() || p < a.getNumberOfLines())
-        throw new std::invalid_argument("invalid inner dimension");
-    
+    Matrix a2(a->getValues()); // temporary object
+
+    unsigned it = 0;
+    unsigned err = 1;
+    while (it < 100 && err > eps) {
+        // normalization
+        for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
+            double aux = 0;
+            for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
+                aux += w->at(i, j) * w->at(i, j);
+            }
+            for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
+                w->setValue(i, j, w->at(i, j)/sqrt(aux));
+            }
+        }
+    }
+
     return w;
 }

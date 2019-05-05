@@ -8,16 +8,16 @@
 #include "Matrix.h"
 
     /** Returns cos and sin parameters used in Givens rotation linear operator **/
-    double* getRGParameters(Matrix w, unsigned i, unsigned j, unsigned k); 
+    double* getRGParameters(Matrix* w, unsigned i, unsigned j, unsigned k); 
     
-    Matrix rotGivens(Matrix w, unsigned i, unsigned j, double c, double s); 
+    void rotGivens(Matrix* w, unsigned i, unsigned j, double c, double s); 
 
     /** Returns R matrix produced by QR factorization */
-    Matrix qrFactorization(Matrix w);
+    void qrFactorization(Matrix* w);
 
     // Returns an R matrix which is the best solution for W * X = B
-    Matrix solveLinearSystems(Matrix w, Matrix b);
+    Matrix* solveLinearSystems(Matrix* w, Matrix* a);
 
-    Matrix nonNegativeFactorization(Matrix a, unsigned p);
+    Matrix* nonNegativeFactorization(Matrix* a, unsigned p);
 
 #endif

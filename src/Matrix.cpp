@@ -4,37 +4,41 @@
 Matrix::Matrix(unsigned n, unsigned m) :
     n(n), m(m)
 {
-    values.resize(n);
-    for (unsigned i = 0; i < values.size(); i++)
+    values = new std::vector<std::vector<double>*>();
+    values->resize(n);
+    for (unsigned i = 0; i < values->size(); i++)
     {
-        values[i].resize(m, 0);
+        (*values)[i] = new std::vector<double>();
+        (*values)[i]->resize(m, 0);
     }
 }
 
 Matrix::Matrix(unsigned n, unsigned m, double initial) :
     n(n), m(m)
 {
-    values.resize(n);
-    for (unsigned i = 0; i < values.size(); i++)
+    values = new std::vector<std::vector<double>*>();
+    values->resize(n);
+    for (unsigned i = 0; i < values->size(); i++)
     {
-        values[i].resize(m, initial);
+        (*values)[i] = new std::vector<double>();
+        (*values)[i]->resize(m, initial);
     }
 }
 
-Matrix::Matrix(std::vector<std::vector<double>> values)
+Matrix::Matrix(std::vector<std::vector<double>*>* values)
 {
-    if (values.size() < 1)
+    if (values->size() < 1)
     {
         throw new std::length_error("Dimensional error");
     }
 
     unsigned max_size = 0;
 
-    for (unsigned i = 0; i < values.size(); i++)
+    for (unsigned i = 0; i < values->size(); i++)
     {
-        if (values[i].size() > max_size)
+        if ((*values)[i]->size() > max_size)
         {
-            max_size = values[i].size();
+            max_size = (*values)[i]->size();
         }
 
         if (max_size == 0)
@@ -43,21 +47,26 @@ Matrix::Matrix(std::vector<std::vector<double>> values)
         }
     }
 
-    for (unsigned i = 0; i < values.size(); i++) {
-        if (values[i].size() < max_size)
+    for (unsigned i = 0; i < values->size(); i++) {
+        if ((*values)[i]->size() < max_size)
         {
-            values[i].resize(max_size, 0);
+            (*values)[i]->resize(max_size, 0);
         }
     }
 
     this->values = values;
-    n = values.size();
+    n = values->size();
     m = max_size;
 }
 
 Matrix::~Matrix()
 {
-    //dtor
+    for (unsigned i = 0; i < values->size(); i++)
+    {
+        delete (*values)[i];
+    }
+
+    delete values;
 }
 
 void Matrix::print()
@@ -71,7 +80,7 @@ void Matrix::print()
         for (unsigned j = 0; j < m; j++)
         {
             unsigned base10 = 0;
-            int aux = fabs(values[i][j]);
+            int aux = fabs((*(*values)[i])[j]);
             while (aux > 0)
             {
                 aux = aux/10;
@@ -126,14 +135,14 @@ void Matrix::print()
         for (unsigned j = 0; j < m; j++)
         {
             
-                if (values[i][j] > 0 || fabs(values[i][j]) < eps) {
+                if ((*(*values)[i])[j] > 0 || fabs((*(*values)[i])[j]) < eps) {
                     std::cout << " ";
                 }
 
-            //std::cout << values[i][j]/pow(10, msd) << "\n";
-            if (fabs(values[i][j])/pow(10, msd) < 1){
+            //std::cout << (*(*values)[i][j])/pow(10, msd) << "\n";
+            if (fabs((*(*values)[i])[j])/pow(10, msd) < 1){
                 unsigned base10 = 0;
-                int aux = fabs(values[i][j]);
+                int aux = fabs((*(*values)[i])[j]);
                 while (aux > 0)
                 {
                     aux = aux/10;
@@ -150,14 +159,14 @@ void Matrix::print()
             }
 
 
-            if (fabs(values[i][j]) < eps) {
-                //std::cout << fabs(values[i][j]) << " eh zero.\n";
+            if (fabs((*(*values)[i])[j]) < eps) {
+                //std::cout << fabs((*(*values)[i][j])) << " eh zero->\n";
                 std::cout << "0.000000 ";    
             }
             else {
                 std::cout << std::fixed
                         << std::setprecision(6) 
-                        << values[i][j] << " ";
+                        << (*(*values)[i])[j] << " ";
             }
         }
 
@@ -194,63 +203,63 @@ void Matrix::setValue(unsigned n, unsigned m, double newValue)
         throw new std::range_error("Invalid index");
     }
 
-    values[n][m] = newValue;
+    (*(*values)[n-1])[m-1] = newValue;
 }
-void Matrix::setRow(unsigned n, std::vector<double> newRow)
+void Matrix::setRow(unsigned n, std::vector<double>* newRow)
 {
-    values[n] = newRow;
+    (*values)[n-1] = newRow;
 
-    if (newRow.size() < m)
+    if (newRow->size() < m)
     {
-        values[n].resize(m, 0);
+        (*values)[n-1]->resize(m, 0);
     }
-    else if (newRow.size() > m)
+    else if (newRow->size() > m)
     {
-        for (unsigned i = 0; i < n; i++)
+        for (unsigned i = 0; i < n-1; i++)
         {
-            values[i].resize(newRow.size(), 0);
+            (*values)[i]->resize(newRow->size(), 0);
         }
 
-        m = newRow.size();
+        m = newRow->size();
     }
 }
 
-void Matrix::setColumn(unsigned m, std::vector<double> newColumn)
+void Matrix::setColumn(unsigned m, std::vector<double>* newColumn)
 {
-    if (newColumn.size() != n)
+    if (newColumn->size() != n)
     {
         throw new std::invalid_argument("Dimensional error");
     }
 
     for (unsigned i = 0; i < n; i++)
     {
-        values[i][m] = newColumn[i];
+        (*(*values)[i])[m-1] = (*newColumn)[i];
     }
 }
 
 double Matrix::at(unsigned n, unsigned m)
 {
-    return values[n][m];
+    return (*(*values)[n-1])[m-1];
 }
 
-std::vector<double> Matrix::getRow(unsigned n)
+std::vector<double>* Matrix::getRow(unsigned n)
 {
-    return (values[n]);
+    return (*values)[n-1];
 }
 
-std::vector<double> Matrix::getColumn(unsigned m)
+std::vector<double>* Matrix::getColumn(unsigned m)
 {
-    std::vector<double> column;
+    std::vector<double>* column;
 
     for (unsigned i = 0; i < n; i++)
     {
-        column.push_back(values[i][m]);
+        column->push_back((*(*values)[i])[m-1]);
     }
 
     return column;
 }
 
-std::vector<std::vector<double>> Matrix::getValues()
+std::vector<std::vector<double>*>* Matrix::getValues()
 {
     return values;
 }
@@ -265,7 +274,7 @@ unsigned Matrix::getNumberOfColumns()
     return m;
 }
 
-Matrix Matrix::transpose()
+void Matrix::transpose()
 {
     Matrix transposed(m, n);
 
@@ -273,87 +282,90 @@ Matrix Matrix::transpose()
     {
         for (unsigned j = 0; j < m; j++)
         {
-            transposed.setValue(j, i, values[i][j]);
+            transposed.setValue(j, i, (*(*values)[i])[j]);
         }
     }
 
-    return transposed;
+    delete values;
+    values = transposed.getValues();
+
+    return;
 }
 
 
 
-Matrix Matrix::operator+(Matrix M)
+Matrix* Matrix::operator+(Matrix* M)
 {
-    if (M.getNumberOfLines() != n || M.getNumberOfColumns() != m)
+    if (M->getNumberOfLines() != n || M->getNumberOfColumns() != m)
         throw new std::invalid_argument("incompatible dimensions");
 
-    Matrix sum(n, m);// = new Matrix(n, m);
+    Matrix* sum = new Matrix(n, m);// = new Matrix(n, m);
 
     for (unsigned i = 0; i < n; i++)
     {
         for (unsigned j = 0; j < m; j++)
         {
-            sum.setValue(i, j, values[i][j] + M.at(i, j));
+            sum->setValue(i, j, (*(*values)[i])[j] + M->at(i, j));
         }
     }
 
     return sum;
 }
     
-Matrix Matrix::operator-(Matrix M)
+Matrix* Matrix::operator-(Matrix* M)
 {
-    if (M.getNumberOfLines() != n || M.getNumberOfColumns() != m)
+    if (M->getNumberOfLines() != n || M->getNumberOfColumns() != m)
     {
         throw new std::invalid_argument("incompatible dimensions");
     }
 
-    Matrix sub(n, m);// = new Matrix(n, m);
+    Matrix* sub = new Matrix(n, m);// = new Matrix(n, m);
 
     for (unsigned i = 0; i < n; i++)
     {
         for (unsigned j = 0; j < m; j++)
         {
-            sub.setValue(i, j, values[i][j] - M.at(i, j));
+            sub->setValue(i, j, (*(*values)[i])[j] - M->at(i, j));
         }
     }
 
     return sub;
 }
 
-Matrix Matrix::operator*(Matrix m)
+Matrix* Matrix::operator*(Matrix* m)
 {
-    if (this->m != m.getNumberOfLines())
+    if (this->m != m->getNumberOfLines())
     {
         throw new std::invalid_argument("incompatible dimensions");
     }
 
-    Matrix mult(n, m.getNumberOfColumns());
+    Matrix* mult = new Matrix(n, m->getNumberOfColumns());
 
-    for (unsigned i = 0; i < mult.getNumberOfLines(); i++)
+    for (unsigned i = 0; i < mult->getNumberOfLines(); i++)
     {
-        for (unsigned j = 0; j < mult.getNumberOfColumns(); j++)
+        for (unsigned j = 0; j < mult->getNumberOfColumns(); j++)
         {
             double sum = 0;
             for (unsigned k = 0; k < this->m; k++)
             {
                 //std::cout << "left[" << i << "][" << k << "] * "
                 //         << "right[" << k << "][" << j << "]\n";
-                sum += values[i][k] * m.at(k, j);
+                sum += (*(*values)[i])[k] * m->at(k, j);
             }
-            mult.setValue(i, j, sum);
+            mult->setValue(i, j, sum);
         }
     }
     
     return mult;
 }
 
-Matrix Matrix::operator*(double d)
+Matrix* Matrix::operator*(double d)
 {
-    Matrix mult(n, m);
+    Matrix* mult = new Matrix(n, m);
 
     for (unsigned i = 0; i < n; i++) {
         for (unsigned j = 0; j < m; j++) {
-            mult.setValue(i, j, values[i][j] * d);
+            mult->setValue(i, j, (*(*values)[i])[j] * d);
         }
     }
 
