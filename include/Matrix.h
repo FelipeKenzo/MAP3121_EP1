@@ -6,6 +6,10 @@
 #include <stdexcept>
 #include <iomanip>
 #include <cmath>
+#include <fstream>
+#include <string>
+#include <sstream>
+
 
 class Matrix
 {
@@ -13,6 +17,7 @@ public:
     Matrix(unsigned n, unsigned m); // initializes a MxN matrix filled with zeroes.
     Matrix(unsigned n, unsigned m, double initial); // initializes a MxN matrix filled with an initial value.
     Matrix(std::vector<std::vector<double>*>* values); // initializas a matrix with pre established values stored in a vector container.
+    Matrix(std::string filePath, unsigned n);
     ~Matrix();
 
     void print(); // maximum matrix size is 9x9. It is pretty slow.

@@ -116,13 +116,16 @@ Matrix* solveLinearSystems(Matrix* w, Matrix* a) { //W * H = A
     return h;
 }
 
-Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
+Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 {
     if (p > a->getNumberOfColumns() || p > a->getNumberOfLines())
         throw new std::invalid_argument("invalid inner dimension");
+
+    if (m > a->getNumberOfColumns())
+        throw new std::invalid_argument("m > colunas(a)");
     
     unsigned n = a->getNumberOfLines();
-    unsigned m = a->getNumberOfColumns();
+    //unsigned m = a->getNumberOfColumns();
 
     Matrix* w  = new Matrix(n, p);
     Matrix* h  = new Matrix(p, m);

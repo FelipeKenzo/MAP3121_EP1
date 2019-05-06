@@ -18,6 +18,6 @@
     // Returns an R matrix which is the best solution for W * X = B
     Matrix* solveLinearSystems(Matrix* w, Matrix* a);
 
-    Matrix* nonNegativeFactorization(Matrix* a, unsigned p);
+    Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p);
 
 #endif

@@ -59,6 +59,56 @@ Matrix::Matrix(std::vector<std::vector<double>*>* values)
     m = max_size;
 }
 
+Matrix::Matrix(std::string filePath, unsigned n) {
+    
+    values = new std::vector<std::vector<double>*>();
+
+    std::ifstream input;
+    input.open(filePath);
+    
+    unsigned lineCount = 0;
+    unsigned columnCount = 0;
+
+    //counts number of columns
+    std::string firstLine;
+    std::getline(input, firstLine);
+    
+    for (unsigned i = 0; i < firstLine.size(); i++) {
+        if (isdigit(firstLine[i]))
+            columnCount++;
+    }
+
+    std::cout << columnCount << "\n";
+
+    values->resize(n);
+    for (unsigned i = 0; i < values->size(); i++)
+    {
+        (*values)[i] = new std::vector<double>();
+        (*values)[i]->resize(columnCount, 0);
+    }
+
+    //ifstream "reset"
+    input.clear();
+    input.seekg(0, std::ios::beg);
+
+    double data = 0;
+    unsigned i = 0;
+    while (i < n && input.good()) {
+        if (input.fail())
+            break;
+        
+        for (unsigned j = 0; j < columnCount; j++) {
+            input >> data;
+            (*(*values)[i])[j] = data;
+        }
+
+        i++;
+    }
+
+
+    input.close();
+}
+
 Matrix::~Matrix()
 {
     for (unsigned i = 0; i < values->size(); i++)
