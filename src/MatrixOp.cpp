@@ -118,7 +118,7 @@ Matrix* solveLinearSystems(Matrix* w, Matrix* a) { //W * H = A
 
 Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
 {
-    if (p < a->getNumberOfColumns() || p < a->getNumberOfLines())
+    if (p > a->getNumberOfColumns() || p > a->getNumberOfLines())
         throw new std::invalid_argument("invalid inner dimension");
     
     unsigned n = a->getNumberOfLines();
@@ -133,16 +133,19 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
             double random = double(rand() % 9 +1);
             w->setValue(i, j, random);
         }
+        
     }
 
-    Matrix a2(a->getValues()); // Temporary object
+
+    Matrix* a2 = new Matrix(a->getValues()); // Temporary object
+
 
     unsigned it = 0;
     unsigned err = 1;
 
     while (it < 100 && err > eps) {
 
-        a2 = a;
+        a2 = (a);
         /*-------!  Normalização W  !---------*/
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double aux = 0;
@@ -154,38 +157,63 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned p)
                 w->setValue(i, j, w->at(i, j)/sqrt(aux));
             }          
         }
+
         /*-----!    MMQ para determinar h     !-----*/
         h = solveLinearSystems(w, a2);
+        std::cout << "Matriz H:";
+        h->print();
 
         /*-----!      Redefinição de h       !------*/
         for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
-            for(unsigned j = 1; j <= h->getNumberOfColumns(); i++){
-                if(h->at(i, j) < -eps || fabs(h->at(i,j)) < eps){
+            for(unsigned j = 1; j <= h->getNumberOfColumns(); j++){                
+                if(h->at(i,j) < -eps){                
                     h->setValue(i, j, 0); 
                 }
             }                
         }
+
+        std::cout << "Matriz H Redefinida:";
+        h->print();
+
         /*-----! Computação de A transposta  !-----*/
-        a2 = a;
+        a2 = (a);
         a2->transpose();
 
+        std::cout << "Matriz A Transposta:";
+        a2->print();
         /*-----!      MMQ das Transpostas    !-----*/
-        wt = solveLinearSystems(h->transpose(), a2);
+        h->transpose();
+        wt = solveLinearSystems(h, a2);
+
+        std::cout << "Matriz H Transposta:";
+        h->print();
+        std::cout << "Matriz W Transposta: (Encontrada pelo MMQ)";
+        wt->print();
 
         /*-----!      Computação de w        !-----*/
-        w = wt;
+        w = (wt);
         w->transpose();
 
         /*-----!     Redefinição de w        !-----*/
         for (unsigned i = 1; i <= w->getNumberOfLines(); i++){
-            for(unsigned j = 1; j <= w->getNumberOfColumns(); i++){
-                if(w->at(i, j) < -eps || fabs(w->at(i,j)) < eps){
+            for(unsigned j = 1; j <= w->getNumberOfColumns(); j++){
+                if(w->at(i, j) < -eps){
                     w->setValue(i, j, 0); 
                 }
             }                
         }   
         it++;
     }
+    delete a2;
+
+    std::cout << "Resultado\n";
+
+    h->transpose();
+    std::cout << "Matriz H:\n";
+    h->print();
+    std::cout << "\nMatriz W:\n";
+    w->print();
+
 
     return w;
 }

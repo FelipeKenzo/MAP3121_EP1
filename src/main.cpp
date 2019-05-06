@@ -29,7 +29,7 @@ int main() {
     }
 //*/
 
-//*
+/*
 std::cout << "==========[Primeira Tarefa]==========\n";
 std::cout << "a)\n\n";
 
@@ -139,4 +139,25 @@ std::cout << "x_d:";
 x_d->print();
 
 //*/
+
+    std::cout << "======== [Segunda Tarefa] =========\n";
+
+    Matrix* a = new Matrix(3, 3);
+    Matrix* w = new Matrix(3, 2);
+
+
+    std::vector<double>* a1 = new std::vector<double>{3.0/10.0, 3.0/5.0, 0};
+    std::vector<double>* a2 = new std::vector<double>{1.0/2.0 ,   0, 1};
+    std::vector<double>* a3 = new std::vector<double>{4.0/10.0, 4.0/5.0, 0};
+
+    a->setRow(1, a1);
+    a->setRow(2, a2);
+    a->setRow(3, a3);
+
+    std::cout << "Matriz A:\n";
+    a->print();
+
+    w = (nonNegativeFactorization(a, 2));
+
+return 0;
 }
