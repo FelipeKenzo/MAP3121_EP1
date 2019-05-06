@@ -124,6 +124,7 @@ void Matrix::print()
     if (m < 1 || n < 1)
         throw new std::length_error("Dimensional error");
 
+    //Para saber o numero com mais algarismos
     unsigned msd = 0;
     for (unsigned i = 0; i < n; i++)
     {
@@ -147,49 +148,20 @@ void Matrix::print()
         }
     }
 
-    // column indexes
-    /*
-    std::cout << "\n       0";
-
-    for (unsigned i = 1; i < m; i++)
-    {
-        for (unsigned j = 0; j < msd; j++)
-        {
-            std::cout << " ";
-        }
-        std::cout << "     " << i;
-    }
-
-    //upper border
-    std::cout << "\n    ";
-
-    for (unsigned i = 0; i < m; i++)
-    {
-        for (unsigned j = 0; j < msd; j++)
-        {
-            std::cout << "-";
-        }
-
-        std::cout << "------";
-    }
-
-    */
     std::cout << "\n";
 
-    // row indexes and actual values
     for (unsigned i = 0; i < n; i++)
     {
-        //std::cout << "  " << i << "|";
         std::cout << "|";
 
         for (unsigned j = 0; j < m; j++)
         {
-            
-                if ((*(*values)[i])[j] > 0 || fabs((*(*values)[i])[j]) < eps) {
-                    std::cout << " ";
-                }
+            //Reserva um espaco para o "-"
+            if ((*(*values)[i])[j] > 0 || fabs((*(*values)[i])[j]) < eps) {
+                std::cout << " ";
+            }
 
-            //std::cout << (*(*values)[i][j])/pow(10, msd) << "\n";
+            //Pula casas se com menos casas que o maior numero
             if (fabs((*(*values)[i])[j])/pow(10, msd) < 1){
                 unsigned base10 = 0;
                 int aux = fabs((*(*values)[i])[j]);
@@ -208,11 +180,11 @@ void Matrix::print()
                 }
             }
 
-
+            //Resolver o zero negativo
             if (fabs((*(*values)[i])[j]) < eps) {
-                //std::cout << fabs((*(*values)[i][j])) << " eh zero->\n";
                 std::cout << "0.000000 ";    
             }
+            //imprime o valor com precisao de 6 casas decimais
             else {
                 std::cout << std::fixed
                         << std::setprecision(6) 
@@ -227,20 +199,6 @@ void Matrix::print()
             std::cout << "\n";
         }
     }
-
-    /*
-    //lower border
-    std::cout << "\n    ";
-
-    for (unsigned i = 0; i < m; i++)
-    {
-        for (unsigned j = 0; j < msd; j++)
-        {
-            std::cout << "-";
-        }
-        std::cout << "------";
-    }
-    */
     
     std::cout << "\n\n";
 }

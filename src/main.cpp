@@ -10,21 +10,20 @@ int main() {
 
     auto p_start = std::chrono::high_resolution_clock::now();
 
+    //*
+    std::vector<double>* a = new std::vector<double>{2, 1,  1, -1,  1};
+    std::vector<double>* b = new std::vector<double>{0, 3,  0,  1,  2};
+    std::vector<double>* c = new std::vector<double>{0, 0,  2,  2, -1};
+    std::vector<double>* d = new std::vector<double>{0, 0, -1,  1,  2};
+    std::vector<double>* e = new std::vector<double>{0, 0,  0,  3,  1};
 
-/*
-    std::vector<double> a = {2, 1,  1, -1};
-    std::vector<double> b = {2, 3,  0,  1};
-    std::vector<double> c = {0, 0,  2,  2};
-    std::vector<double> d = {4, 0, -1,  1};
-    std::vector<double> e = {0, 0,  0,  3};
+    std::vector<std::vector<double>*>* m_values = new std::vector<std::vector<double>*>{a, b, c, d, e};
 
-    std::vector<std::vector<double>> m_values = {a, b, c, d, e};
+    Matrix* m1 = new Matrix(m_values);
 
-    Matrix m1(m_values);
-    double cos = 2 / sqrt(5);
-    double sin = 1 / sqrt(5);
+    std::cout << "QR Factorization test: \n\n" << "W:";
 
-    std::cout << "QR Factorization test: ";
+    m1->print();
 
     try {
     qrFactorization(m1);
@@ -32,14 +31,24 @@ int main() {
     } catch (std::range_error* e) {
         std::cout << "Error: " << e->what() << "\n";
     }
-//*/
 
-    /*
+    std::cout << "R:";
+
+    m1->print();
+
+    auto qr_finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> qr_elapsed = qr_finish - p_start;
+    
+    std::cout << "QR elapsed time: " << qr_elapsed.count() << "\n\n";
+    //*/
+
+    //*
+    auto t1_start = std::chrono::high_resolution_clock::now();
     std::cout << "==========[Primeira Tarefa]==========\n";
     std::cout << "a)\n\n";
 
-    Matrix* w_a = new Matrix(63, 63);
-    Matrix* b_a = new Matrix(63, 1);
+    Matrix* w_a = new Matrix(64, 64);
+    Matrix* b_a = new Matrix(64, 1);
 
     for (unsigned i = 1; i <= w_a->getNumberOfLines(); i++) {
         b_a->setValue(i, 1, 1);
@@ -101,8 +110,8 @@ int main() {
 
     std::cout << "c)\n\n";
 
-    Matrix* w_c = new Matrix(63, 63);
-    Matrix* b_c = new Matrix(63, 3);
+    Matrix* w_c = new Matrix(64, 64);
+    Matrix* b_c = new Matrix(64, 3);
 
     for (unsigned i = 1; i <= w_c->getNumberOfLines(); i++) {
         b_c->setValue(i, 1, 1);
@@ -143,6 +152,11 @@ int main() {
     std::cout << "x_d:";
     x_d->print();
 
+    auto t1_finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t1_elapsed = t1_finish - t1_start;
+
+    std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
+
     //*/
 
     /*
@@ -166,13 +180,14 @@ int main() {
     w = (nonNegativeFactorization(a, 2));
     //*/
 
-    Matrix* a = new Matrix("train_dig0.txt", 784);
-    std::cout << a->at(784, 5923) << "\n";
+    Matrix* a1 = new Matrix("train_dig0.txt", 784);
+    std::cout << a1->at(784, 5923) << "\n";
 
     auto p_finish = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double> p_elapsed = p_finish - p_start;
-    std::cout << "Total elapsed time: " << p_elapsed.count() << "\n";
+    
+    std::cout << "\nTotal elapsed time: " << p_elapsed.count() << "\n";
 
     return 0;
 }
