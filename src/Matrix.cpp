@@ -80,12 +80,16 @@ Matrix::Matrix(std::string filePath, unsigned n) {
 
     std::cout << columnCount << "\n";
 
+    //allocates necessary space
     values->resize(n);
     for (unsigned i = 0; i < values->size(); i++)
     {
         (*values)[i] = new std::vector<double>();
         (*values)[i]->resize(columnCount, 0);
     }
+
+    this->n = n;
+    this->m = columnCount;
 
     //ifstream "reset"
     input.clear();
@@ -199,7 +203,7 @@ void Matrix::print()
             std::cout << "\n";
         }
     }
-    
+
     std::cout << "\n\n";
 }
 
