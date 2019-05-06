@@ -217,6 +217,7 @@ void Matrix::setValue(unsigned n, unsigned m, double newValue)
 
     (*(*values)[n-1])[m-1] = newValue;
 }
+
 void Matrix::setRow(unsigned n, std::vector<double>* newRow)
 {
     (*values)[n-1] = newRow;
@@ -227,7 +228,7 @@ void Matrix::setRow(unsigned n, std::vector<double>* newRow)
     }
     else if (newRow->size() > m)
     {
-        for (unsigned i = 0; i < n-1; i++)
+        for (unsigned i = 0; i < n; i++)
         {
             (*values)[i]->resize(newRow->size(), 0);
         }
