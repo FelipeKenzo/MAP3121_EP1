@@ -250,6 +250,10 @@ void Matrix::setColumn(unsigned m, std::vector<double>* newColumn)
     }
 }
 
+void Matrix::setValues(std::vector<std::vector<double>*>* newValues){
+    values = newValues;
+}
+
 double Matrix::at(unsigned n, unsigned m)
 {
     return (*(*values)[n-1])[m-1];
