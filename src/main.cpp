@@ -179,6 +179,8 @@ int main() {
     a->print();
 
     w = (nonNegativeFactorization(a, 3, 2));
+
+    
     
     /*
 

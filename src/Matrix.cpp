@@ -252,6 +252,8 @@ void Matrix::setColumn(unsigned m, std::vector<double>* newColumn)
 
 void Matrix::setValues(std::vector<std::vector<double>*>* newValues){
     values = newValues;
+    n = newValues->size();
+    m = (*newValues)[0]->size();
 }
 
 double Matrix::at(unsigned n, unsigned m)
@@ -293,17 +295,28 @@ unsigned Matrix::getNumberOfColumns()
 
 void Matrix::transpose()
 {
-    Matrix transposed(m, n);
+    std::vector<std::vector<double>*>* tValues= new std::vector<std::vector<double>*>();
+    tValues->resize(m);
+
+    for (unsigned i = 0; i < m; i++) {
+        (*tValues)[i] = new std::vector<double>();
+        (*tValues)[i]->resize(n);
+    }
 
     for (unsigned i = 0; i < n; i++)
     {
-        for (unsigned j = i+1; j < m; j++)
+        for (unsigned j = 0; j < m; j++)
         {
-            double aux = (*(*values)[i])[j];
-            (*(*values)[i])[j] = (*(*values)[j])[i];
-            (*(*values)[j])[i] = aux;
+            (*(*tValues)[j])[i] = (*(*values)[i])[j];
         }
     }
+
+    delete values;
+    values = tValues;
+
+    unsigned aux = m;
+    m = n;
+    n = aux;
 
     return;
 }
@@ -357,16 +370,16 @@ Matrix* Matrix::operator*(Matrix* m)
 
     Matrix* mult = new Matrix(n, m->getNumberOfColumns());
 
-    for (unsigned i = 0; i < mult->getNumberOfLines(); i++)
+    for (unsigned i = 1; i <= mult->getNumberOfLines(); i++)
     {
-        for (unsigned j = 0; j < mult->getNumberOfColumns(); j++)
+        for (unsigned j = 1; j <= mult->getNumberOfColumns(); j++)
         {
             double sum = 0;
-            for (unsigned k = 0; k < this->m; k++)
+            for (unsigned k = 1; k <= this->m; k++)
             {
                 //std::cout << "left[" << i << "][" << k << "] * "
                 //         << "right[" << k << "][" << j << "]\n";
-                sum += (*(*values)[i])[k] * m->at(k, j);
+                sum += (*(*values)[i-1])[k-1] * m->at(k, j);
             }
             mult->setValue(i, j, sum);
         }
