@@ -130,33 +130,50 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     Matrix* w  = new Matrix(n, p);
     Matrix* h;  //= new Matrix(p, m);
     Matrix* wt; //= new Matrix(p, n);
-    Matrix* a2 = new Matrix(n, m); // Temporary Object
+    Matrix* a2;  // Temporary Object
+
+    //std::cout << "n: " << n << "\n";
+    //std::cout << "m: " << m << "\n";
+    //std::cout << "p: " << p << "\n";
 
     //Initializing a random positive w
+    //std::cout << "setValue chamado.\n";
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
             w->setValue(i, j, random);
         }        
-    } 
+    }
+
 
     unsigned it = 0;
     double err = 1;
 
     while (it < 100 && err > eps) {
+        std::cout << "It: " << it << "\n";
         //std::cout << "=== iteracao: " << it << " ===\n";
         //std::cout << "======= erro: " << err << " ===\n";
 
         /*------! Criando uma cópia de A !-----*/
-
+        //std::cout << "setValue chamado (copia de A).\n";
+        //std::cout << "n: " << n << "\n";
+        //std::cout << "n(A): " << a2->getNumberOfLines() << "\n";
+        
+        auto c_start = std::chrono::high_resolution_clock::now();
+        a2 = new Matrix(n, m);
+        
         for(unsigned i = 1; i <= n; i++){
-            for(unsigned j = 1; j <= n; j++){
+            for(unsigned j = 1; j <= m; j++){
                 a2->setValue(i,j, a->at(i,j));
             }
         }
-    
+        //auto c_finish = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> c_elapsed = c_finish - c_start;
+
+        //std::cout << "Copy time: " << c_elapsed.count() << "\n";
 
         /*-------!  Normalização W  !---------*/
+        //std::cout << "setValue chamado.\n";
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double aux = 0;
             
@@ -170,10 +187,13 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         /*-----!    MMQ para determinar h     !-----*/
         h = solveLinearSystems(w, a2);
+        //std::cout << "n(A): " << a2->getNumberOfLines() << "\n";
+
         //std::cout << "Matriz H:";
         //h->print();
 
         /*-----!      Redefinição de h       !------*/
+        //std::cout << "setValue chamado.\n";
         for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= h->getNumberOfColumns(); j++){                
                 if(h->at(i,j) < -eps){                
@@ -187,8 +207,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         /*-----! Computação de A transposta  !-----*/
         //reseta os valores de a2 aos da matriz original.
+        //std::cout << "setValue chamado.\n";
         for(unsigned i = 1; i <= n; i++){
-            for(unsigned j = 1; j <= n; j++){
+            for(unsigned j = 1; j <= m; j++){
                 a2->setValue(i,j, a->at(i,j));
             }
         }
@@ -202,6 +223,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         
         Matrix* ht = new Matrix (p, m);
         
+        //std::cout << "setValue chamado.\n";
         for(unsigned i = 1; i <= p; i++){
             for(unsigned j = 1; j <= m; j++){
                 ht->setValue(i,j, h->at(i,j));
@@ -228,11 +250,13 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
 
         delete w;
+        delete a2;
         w = wt;
 
         //w->print();
 
         /*-----!     Redefinição de w        !-----*/
+        //std::cout << "setValue chamado.\n";
         for (unsigned i = 1; i <= w->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= w->getNumberOfColumns(); j++){
                 //std::cout << "[" << i << "][" << j << "]\n";
@@ -247,6 +271,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         //w->print();   
 
         //Calculating error
+        /*
         err = 0;
 
         Matrix* wxh = (*w) * h;
@@ -254,6 +279,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         //a->print();
         //wxh->print();
 
+        
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
                 //std::cout << "[" << i << "][" << j << "] ";
@@ -262,8 +288,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
                 //std::cout << aux * aux << " " << err << "\n";
             }
         }
-
         delete wxh;
+        //*/
+
         delete h;
 
         it++;

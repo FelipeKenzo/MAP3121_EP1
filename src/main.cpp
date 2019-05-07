@@ -186,7 +186,7 @@ int main() {
     auto t2_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> t2_elapsed = t2_finish - t2_start;
 
-    std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
+    std::cout << "Tarefa 2 elapsed time: " << t2_elapsed.count() << "\n\n";
     
     //*
     std::cout << "======== [Tarefa Principal] =========\n";
@@ -194,7 +194,19 @@ int main() {
 
     Classificator* classificators[10];
         for (unsigned i = 0; i < 10; i++){
+            std::cout << "Inicializando classificador d" << i << ".\n";
+            
             classificators[i] = new Classificator("train_dig" + std::to_string(i) + ".txt");
+            std::cout << "classificador d" << i << " inicializado.\n";
+            
+            std::cout << "Iniciando treinamento d" << i << ".\n";
+            
+            auto train_start = std::chrono::high_resolution_clock::now();
+            classificators[i]->train(1000, 15);
+            auto train_finish = std::chrono::high_resolution_clock::now();
+            
+            std::chrono::duration<double> train_elapsed = train_finish - train_start;
+            std::cout << "Treinou.\nTraining elapsed time: " << train_elapsed.count() <<"\n\n";
         }
 
     auto tp_finish = std::chrono::high_resolution_clock::now();

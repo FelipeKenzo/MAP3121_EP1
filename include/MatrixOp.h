@@ -5,6 +5,8 @@
     Definitions for the Matrix Operations package
 */
 
+#include <chrono>
+
 #include "Matrix.h"
 
     /** Returns cos and sin parameters used in Givens rotation linear operator **/

@@ -78,7 +78,7 @@ Matrix::Matrix(std::string filePath, unsigned n) {
             columnCount++;
     }
 
-    std::cout << columnCount << "\n";
+    //std::cout << columnCount << "\n";
 
     //allocates necessary space
     values->resize(n);

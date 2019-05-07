@@ -8,11 +8,14 @@ Classificator::Classificator(std::string filePath) :
 
 Classificator::~Classificator() {
     delete wd;
+    delete a;
 }
 
 void Classificator::train(unsigned ndig_treino, unsigned p) {
     
+    //std::cout << "Antes do nmf.\n";
     wd = nonNegativeFactorization(a, ndig_treino, p);
+    //std::cout << "Depois do nmf.\n";
 }
 
 Matrix* Classificator::getWd() {
