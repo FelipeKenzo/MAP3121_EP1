@@ -3,12 +3,13 @@
 #include <cmath>
 #include <chrono>
 
+#include "Classificator.h"
 #include "Matrix.h"
 #include "MatrixOp.h"
 
 int main() {
 
-   /*
+   //*
     auto p_start = std::chrono::high_resolution_clock::now();
 
     //*
@@ -44,7 +45,6 @@ int main() {
     //*/
 
     //*
-    /*
     auto t1_start = std::chrono::high_resolution_clock::now();
     std::cout << "==========[Primeira Tarefa]==========\n";
     std::cout << "a)\n\n";
@@ -159,11 +159,12 @@ int main() {
 
     std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
 
-    */
+    //*/
     
     std::cout << "======== [Segunda Tarefa] =========\n";
+    auto t2_start = std::chrono::high_resolution_clock::now();
 
-    Matrix* a = new Matrix(3, 3);
+    Matrix* at2 = new Matrix(3, 3);
     Matrix* w = new Matrix(3, 2);
 
 
@@ -171,28 +172,42 @@ int main() {
     std::vector<double>* a2 = new std::vector<double>{1.0/2.0 ,   0, 1};
     std::vector<double>* a3 = new std::vector<double>{4.0/10.0, 4.0/5.0, 0};
 
-    a->setRow(1, a1);
-    a->setRow(2, a2);
-    a->setRow(3, a3);
+    at2->setRow(1, a1);
+    at2->setRow(2, a2);
+    at2->setRow(3, a3);
 
     std::cout << "Matriz A:\n";
-    a->print();
+    at2->print();
 
-    w = (nonNegativeFactorization(a, 3, 2));
+    std::cout << "Matriz W:\n";
+    w = (nonNegativeFactorization(at2, 3, 2));
+    w->print();
 
+    auto t2_finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t2_elapsed = t2_finish - t2_start;
+
+    std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
+    
+    //*
+    std::cout << "======== [Tarefa Principal] =========\n";
+    auto tp_start = std::chrono::high_resolution_clock::now();
+
+    Classificator* classificators[10];
+        for (unsigned i = 0; i < 10; i++){
+            classificators[i] = new Classificator("train_dig" + std::to_string(i) + ".txt");
+        }
+
+    auto tp_finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> tp_elapsed = tp_finish - tp_start;
+    
+    std::cout << "\nTarefa Principal elapsed time: " << tp_elapsed.count() << "\n";
+    //*/
     
     
-    /*
-
-    Matrix* a1 = new Matrix("train_dig0.txt", 784);
-    std::cout << a1->at(784, 5923) << "\n";
-
     auto p_finish = std::chrono::high_resolution_clock::now();
-
     std::chrono::duration<double> p_elapsed = p_finish - p_start;
     
     std::cout << "\nTotal elapsed time: " << p_elapsed.count() << "\n";
-    */
 
     return 0;
 }

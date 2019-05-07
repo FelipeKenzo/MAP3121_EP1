@@ -141,9 +141,11 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     } 
 
     unsigned it = 0;
-    unsigned err = 1;
+    double err = 1;
 
     while (it < 100 && err > eps) {
+        //std::cout << "=== iteracao: " << it << " ===\n";
+        //std::cout << "======= erro: " << err << " ===\n";
 
         /*------! Criando uma cópia de A !-----*/
 
@@ -168,8 +170,8 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         /*-----!    MMQ para determinar h     !-----*/
         h = solveLinearSystems(w, a2);
-        std::cout << "Matriz H:";
-        h->print();
+        //std::cout << "Matriz H:";
+        //h->print();
 
         /*-----!      Redefinição de h       !------*/
         for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
@@ -180,8 +182,8 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }                
         }
 
-        std::cout << "Matriz H Redefinida:";
-        h->print();
+        //std::cout << "Matriz H Redefinida:";
+        //h->print();
 
         /*-----! Computação de A transposta  !-----*/
         //reseta os valores de a2 aos da matriz original.
@@ -193,24 +195,36 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         a2->transpose();
 
-        std::cout << "Matriz A Transposta:";
-        a2->print();
+        //std::cout << "Matriz A Transposta:";
+        //a2->print();
+
+        //std::cout << "Matriz H Transposta:";
+        
+        Matrix* ht = new Matrix (p, m);
+        
+        for(unsigned i = 1; i <= p; i++){
+            for(unsigned j = 1; j <= m; j++){
+                ht->setValue(i,j, h->at(i,j));
+            }
+        }
+        
+        ht->transpose();
+        //ht->print();
 
         /*-----!      MMQ das Transpostas    !-----*/
-        h->transpose();
-        wt = solveLinearSystems(h, a2);
+        wt = solveLinearSystems(ht, a2);
 
-        std::cout << "Matriz H Transposta:";
-        h->print();
+        delete ht;
 
-        std::cout << "Matriz W Transposta: (Encontrada pelo MMQ)";
-        wt->print();
+
+        //std::cout << "Matriz W Transposta: (Encontrada pelo MMQ)";
+        //wt->print();
 
         /*-----!      Computação de w        !-----*/
         wt->transpose();
         
-        std::cout << "Wt transposta:";
-        wt->print();
+        //std::cout << "Wt transposta:";
+        //wt->print();
 
 
         delete w;
@@ -229,44 +243,48 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }                
         }
 
-        std::cout << "Matriz W redefinida";
-        w->print();   
-
-        h->transpose();
-        h->print();
+        //std::cout << "Matriz W redefinida";
+        //w->print();   
 
         //Calculating error
         err = 0;
 
         Matrix* wxh = (*w) * h;
 
+        //a->print();
+        //wxh->print();
+
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
-                //std::cout << "[" << i << "][" << j << "]\n";
-                err += (a->at(i,j) - wxh->at(i,j)) * (a->at(i,j) - wxh->at(i,j));
+                //std::cout << "[" << i << "][" << j << "] ";
+                double aux = (a->at(i,j) - wxh->at(i,j));
+                err += aux * aux;
+                //std::cout << aux * aux << " " << err << "\n";
             }
         }
 
         delete wxh;
+        delete h;
 
         it++;
-        if (it < 100)
-        delete h;
+
+        //if (it < 100 || err < eps)
+            //delete h;
     }
 
-    std::cout << "Resultado\n\n";
+    //std::cout << "Resultado\n\n";
 
-    std::cout << "Iteracoes: " << it << "\n";
-    std::cout << "Erro: " << err << "\n\n";
+    //std::cout << "Iteracoes: " << it << "\n";
+    //std::cout << "Erro: " << err << "\n\n";
 
-    //h->transpose();
-    std::cout << "Matriz H:\n";
-    h->print();
-    std::cout << "Matriz W:\n";
-    w->print();
+    //std::cout << "Matriz H:\n";
+    //h->print();
 
-    std::cout << "Matriz W * H:\n";
-    ((*w) * h)->print();
+    //std::cout << "Matriz W:\n";
+    //w->print();
+
+    //std::cout << "Matriz W * H:\n";
+    //((*w) * h)->print();
 
 
     return w;
