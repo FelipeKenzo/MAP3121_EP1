@@ -220,11 +220,16 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         //Calculating error
         err = 0;
-        for(unsigned i = 1, i <= n, i++){
-            for(unsigned j = 1, j <= n, j++){
-                err += (a->at(i,j) - (w * h)->at(i,j)) * (a->at(i,j) - (w * h)->at(i,j));
+
+        Matrix* wxh = (*w) * h;
+
+        for(unsigned i = 1; i <= n; i++){
+            for(unsigned j = 1; j <= n; j++){
+                err += (a->at(i,j) - wxh->at(i,j)) * (a->at(i,j) - wxh->at(i,j));
             }
         }
+
+        delete wxh;
 
         it++;
     }

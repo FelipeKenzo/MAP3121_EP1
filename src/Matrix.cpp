@@ -297,14 +297,13 @@ void Matrix::transpose()
 
     for (unsigned i = 0; i < n; i++)
     {
-        for (unsigned j = 0; j < m; j++)
+        for (unsigned j = i+1; j < m; j++)
         {
-            transposed.setValue(j, i, (*(*values)[i])[j]);
+            double aux = (*(*values)[i])[j];
+            (*(*values)[i])[j] = (*(*values)[j])[i];
+            (*(*values)[j])[i] = aux;
         }
     }
-
-    delete values;
-    values = transposed.getValues();
 
     return;
 }
