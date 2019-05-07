@@ -8,6 +8,7 @@
 
 int main() {
 
+   /*
     auto p_start = std::chrono::high_resolution_clock::now();
 
     //*
@@ -43,6 +44,7 @@ int main() {
     //*/
 
     //*
+    /*
     auto t1_start = std::chrono::high_resolution_clock::now();
     std::cout << "==========[Primeira Tarefa]==========\n";
     std::cout << "a)\n\n";
@@ -157,9 +159,8 @@ int main() {
 
     std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
 
-    //*/
-
-    /*
+    */
+    
     std::cout << "======== [Segunda Tarefa] =========\n";
 
     Matrix* a = new Matrix(3, 3);
@@ -177,8 +178,9 @@ int main() {
     std::cout << "Matriz A:\n";
     a->print();
 
-    w = (nonNegativeFactorization(a, 2));
-    //*/
+    w = (nonNegativeFactorization(a, 3, 2));
+    
+    /*
 
     Matrix* a1 = new Matrix("train_dig0.txt", 784);
     std::cout << a1->at(784, 5923) << "\n";
@@ -188,6 +190,7 @@ int main() {
     std::chrono::duration<double> p_elapsed = p_finish - p_start;
     
     std::cout << "\nTotal elapsed time: " << p_elapsed.count() << "\n";
+    */
 
     return 0;
 }

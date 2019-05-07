@@ -130,25 +130,30 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     Matrix* w  = new Matrix(n, p);
     Matrix* h  = new Matrix(p, m);
     Matrix* wt = new Matrix(p, n);
+    Matrix* a2 = new Matrix(n, m); // Temporary Object
 
+    //Initializing a random positive w
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
             w->setValue(i, j, random);
-        }
-        
-    }
-
-
-    Matrix* a2 = new Matrix(a->getValues()); // Temporary object
-
+        }        
+    } 
 
     unsigned it = 0;
     unsigned err = 1;
 
     while (it < 100 && err > eps) {
 
-        a2 = (a);
+        /*------! Criando uma cópia de A !-----*/
+
+        for(unsigned i = 1; i <= n; i++){
+            for(unsigned j = 1; j <= n; j++){
+                a2->setValue(i,j, a->at(i,j));
+            }
+        }
+    
+
         /*-------!  Normalização W  !---------*/
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double aux = 0;
@@ -179,11 +184,16 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         h->print();
 
         /*-----! Computação de A transposta  !-----*/
-        a2 = (a);
+        for(unsigned i = 1; i <= n; i++){
+            for(unsigned j = 1; j <= n; j++){
+                a2->setValue(i,j, a->at(i,j));
+            }
+        }
         a2->transpose();
 
         std::cout << "Matriz A Transposta:";
         a2->print();
+
         /*-----!      MMQ das Transpostas    !-----*/
         h->transpose();
         wt = solveLinearSystems(h, a2);
@@ -194,7 +204,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         wt->print();
 
         /*-----!      Computação de w        !-----*/
-        w = (wt);
+        w->setValues(wt->getValues());
         w->transpose();
 
         /*-----!     Redefinição de w        !-----*/
@@ -205,9 +215,19 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
                 }
             }                
         }   
+
+        h->transpose();
+
+        //Calculating error
+        err = 0;
+        for(unsigned i = 1, i <= n, i++){
+            for(unsigned j = 1, j <= n, j++){
+                err += (a->at(i,j) - (w * h)->at(i,j)) * (a->at(i,j) - (w * h)->at(i,j));
+            }
+        }
+
         it++;
     }
-    delete a2;
 
     std::cout << "Resultado\n";
 
