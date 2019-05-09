@@ -78,7 +78,7 @@ Matrix::Matrix(std::string filePath, unsigned n) {
             columnCount++;
     }
 
-    //std::cout << columnCount << "\n";
+    std::cout << columnCount << "\n";
 
     //allocates necessary space
     values->resize(n);
@@ -332,11 +332,11 @@ Matrix* Matrix::operator+(Matrix* M)
 
     Matrix* sum = new Matrix(n, m);// = new Matrix(n, m);
 
-    for (unsigned i = 0; i < n; i++)
+    for (unsigned i = 1; i <= n; i++)
     {
-        for (unsigned j = 0; j < m; j++)
+        for (unsigned j = 1; j <= m; j++)
         {
-            sum->setValue(i, j, (*(*values)[i])[j] + M->at(i, j));
+            sum->setValue(i, j, (*(*values)[i-1])[j-1] + M->at(i, j));
         }
     }
 
@@ -345,6 +345,7 @@ Matrix* Matrix::operator+(Matrix* M)
     
 Matrix* Matrix::operator-(Matrix* M)
 {
+    //std::cout << n << " x " << m << " - " << M->getNumberOfLines() << " x " << M->getNumberOfColumns() << "\n";
     if (M->getNumberOfLines() != n || M->getNumberOfColumns() != m)
     {
         throw new std::invalid_argument("incompatible dimensions");
@@ -352,11 +353,11 @@ Matrix* Matrix::operator-(Matrix* M)
 
     Matrix* sub = new Matrix(n, m);// = new Matrix(n, m);
 
-    for (unsigned i = 0; i < n; i++)
+    for (unsigned i = 1; i <= n; i++)
     {
-        for (unsigned j = 0; j < m; j++)
+        for (unsigned j = 1; j <= m; j++)
         {
-            sub->setValue(i, j, (*(*values)[i])[j] - M->at(i, j));
+            sub->setValue(i, j, (*(*values)[i-1])[j-1] - M->at(i, j));
         }
     }
 
@@ -365,12 +366,15 @@ Matrix* Matrix::operator-(Matrix* M)
 
 Matrix* Matrix::operator*(Matrix* m)
 {
+    //std:: cout << this->m << " e " << m->getNumberOfLines() << "\n";
     if (this->m != m->getNumberOfLines())
     {
         throw new std::invalid_argument("incompatible dimensions");
     }
 
     Matrix* mult = new Matrix(n, m->getNumberOfColumns());
+
+    //std::cout << "Multiplicação eh " << n << " x " << mult->getNumberOfColumns() << "\n";
 
     for (unsigned i = 1; i <= mult->getNumberOfLines(); i++)
     {

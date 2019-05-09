@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include "Classificator.h"
 #include "Matrix.h"
@@ -14,8 +15,11 @@ class Tester{
         ~Tester();
 
         void test(unsigned n_test, unsigned p);//Same p used in trainning
+        
+        void results();
 
     private:
+        unsigned n_test;
 
         Matrix* a;
         std::vector<int>* mostProbableDigits;

@@ -2,15 +2,16 @@
 #include <string>
 #include <cmath>
 #include <chrono>
+#include <stdexcept>
 
 #include "Classificator.h"
 #include "Matrix.h"
 #include "MatrixOp.h"
 #include "Tester.h"
-#include "MatrixPersistence.h"
+//#include "MatrixPersistence.h"
 
 int main() {
-    /*
+    //*
    //*
     auto p_start = std::chrono::high_resolution_clock::now();
 
@@ -190,31 +191,35 @@ int main() {
 
     std::cout << "Tarefa 2 elapsed time: " << t2_elapsed.count() << "\n\n";
     
-    */
+    //*/
 
-
+    //*
     std::cout << "======== [Tarefa Principal] =========\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
 
     Classificator* classificators[10];
-    Tester tester("test_images.txt", "test_index.txt", classificators);
-    MatrixPersistence* persistence = new MatrixPersistence();
+    //MatrixPersistence* persistence = new MatrixPersistence();
 
         for (unsigned i = 0; i < 10; i++){
-            std::cout << "Inicializando classificador d..." << i << ".\n";
+            std::cout << "Inicializando classificador d " << i << "...\n";
             
             classificators[i] = new Classificator("train_dig" + std::to_string(i) + ".txt");
             std::cout << "classificador d" << i << " inicializado.\n";
             
-            std::cout << "Iniciando treinamento d..." << i << ".\n";
+            std::cout << "Iniciando treinamento d " << i << "...\n";
             
             auto train_start = std::chrono::high_resolution_clock::now();
-            classificators[i]->train(100, 5);
+            try {
+                classificators[i]->train(10, 5);
+            } catch (std::invalid_argument* e) {
+                std::cout << "Erro: " << e->what() << "\n";
+            }
             auto train_finish = std::chrono::high_resolution_clock::now();
-            
+
             std::chrono::duration<double> train_elapsed = train_finish - train_start;
             std::cout << "Treinou.\nTraining elapsed time: " << train_elapsed.count() <<"\n\n";
 
+            /*
             std::cout << "Salvando matrix do classificador...\n";
             persistence->save("classificator_100_5_" + std::to_string(i) + ".txt", classificators[i]->getWd());
             
@@ -222,17 +227,26 @@ int main() {
             train_elapsed = train_finish - save_finish;
 
             std::cout << "Salvou.\nSaving elapsed time: " << train_elapsed.count() << "\n\n\n";
+            //*/
         }
 
+    Tester tester("test_images.txt", "test_index.txt", classificators);
 
+    try {
+        tester.test(1000, 5);
+    } catch (std::invalid_argument* e) {
+        std::cout << "Erro: " << e->what() << "\n";
+    }
+
+    tester.results();
 
 
     auto tp_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> tp_elapsed = tp_finish - tp_start;
     
     std::cout << "\nTarefa Principal elapsed time: " << tp_elapsed.count() << "\n";    
-    
-    /*
+    //*/
+
     
     auto p_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> p_elapsed = p_finish - p_start;
@@ -240,5 +254,4 @@ int main() {
     std::cout << "\nTotal elapsed time: " << p_elapsed.count() << "\n";
     
     return 0;
-    */
 }

@@ -132,12 +132,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     Matrix* wt; //= new Matrix(p, n);
     Matrix* a2;  // Temporary Object
 
-    //std::cout << "n: " << n << "\n";
-    //std::cout << "m: " << m << "\n";
-    //std::cout << "p: " << p << "\n";
-
     //Initializing a random positive w
-    //std::cout << "setValue chamado.\n";
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
@@ -145,22 +140,14 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         }        
     }
 
-
     unsigned it = 0;
-    double err = 1;
+    double err;
     double dErr = 1;
 
     while (it < 100 && dErr > eps) {
-        std::cout << "It: " << it << "\n";
-        //std::cout << "=== iteracao: " << it << " ===\n";
-        //std::cout << "======= erro: " << err << " ===\n";
 
         /*------! Criando uma cópia de A !-----*/
-        //std::cout << "setValue chamado (copia de A).\n";
-        //std::cout << "n: " << n << "\n";
-        //std::cout << "n(A): " << a2->getNumberOfLines() << "\n";
         
-        auto c_start = std::chrono::high_resolution_clock::now();
         a2 = new Matrix(n, m);
         
         for(unsigned i = 1; i <= n; i++){
@@ -168,13 +155,8 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
                 a2->setValue(i,j, a->at(i,j));
             }
         }
-        //auto c_finish = std::chrono::high_resolution_clock::now();
-        //std::chrono::duration<double> c_elapsed = c_finish - c_start;
-
-        //std::cout << "Copy time: " << c_elapsed.count() << "\n";
 
         /*-------!  Normalização W  !---------*/
-        //std::cout << "setValue chamado.\n";
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double aux = 0;
             
@@ -188,13 +170,8 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         /*-----!    MMQ para determinar h     !-----*/
         h = solveLinearSystems(w, a2);
-        //std::cout << "n(A): " << a2->getNumberOfLines() << "\n";
-
-        //std::cout << "Matriz H:";
-        //h->print();
 
         /*-----!      Redefinição de h       !------*/
-        //std::cout << "setValue chamado.\n";
         for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= h->getNumberOfColumns(); j++){                
                 if(h->at(i,j) < -eps){                
@@ -203,12 +180,8 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }                
         }
 
-        //std::cout << "Matriz H Redefinida:";
-        //h->print();
-
-        /*-----! Computação de A transposta  !-----*/
+        /*-----! Computação de A original transposta  !-----*/
         //reseta os valores de a2 aos da matriz original.
-        //std::cout << "setValue chamado.\n";
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
                 a2->setValue(i,j, a->at(i,j));
@@ -216,15 +189,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         }
 
         a2->transpose();
-
-        //std::cout << "Matriz A Transposta:";
-        //a2->print();
-
-        //std::cout << "Matriz H Transposta:";
         
         Matrix* ht = new Matrix (p, m);
         
-        //std::cout << "setValue chamado.\n";
         for(unsigned i = 1; i <= p; i++){
             for(unsigned j = 1; j <= m; j++){
                 ht->setValue(i,j, h->at(i,j));
@@ -232,23 +199,14 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         }
         
         ht->transpose();
-        //ht->print();
 
         /*-----!      MMQ das Transpostas    !-----*/
         wt = solveLinearSystems(ht, a2);
 
         delete ht;
 
-
-        //std::cout << "Matriz W Transposta: (Encontrada pelo MMQ)";
-        //wt->print();
-
         /*-----!      Computação de w        !-----*/
         wt->transpose();
-        
-        //std::cout << "Wt transposta:";
-        //wt->print();
-
 
         delete w;
         delete a2;
@@ -260,54 +218,50 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         //std::cout << "setValue chamado.\n";
         for (unsigned i = 1; i <= w->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= w->getNumberOfColumns(); j++){
-                //std::cout << "[" << i << "][" << j << "]\n";
                 if(w->at(i, j) < -eps){
-                    //std::cout << w->at(i, j) << "\n";
                     w->setValue(i, j, 0); 
                 }
-            }                
+            }
+        }                
         
         //Calculating error
-        //*
-        err = 0;
+        //[]
 
         Matrix* wxh = (*w) * h;
 
-        //a->print();
-        //wxh->print();
-
+        double newErr = 0;
         
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
                 //std::cout << "[" << i << "][" << j << "] ";
                 double aux = (a->at(i,j) - wxh->at(i,j));
-                err += aux * aux;
+                newErr += aux * aux;
                 //std::cout << aux * aux << " " << err << "\n";
             }
         }
         delete wxh;
+        //std::cout << "Erro calculado: " << newErr << "\n";
+
+        if (it == 0) {
+            err = newErr;
+            dErr = 1;
         }
-
-        dErr = fabs(dErr - err);
-        std::cout << "dErr: " << dErr << "\n";
-
-        //std::cout << "Matriz W redefinida";
-        //w->print();   
-
-        //*/
-
+        else {
+            //std::cout << err << " - " << newErr << " = " << fabs(err - newErr) << "\n";
+            dErr = fabs(err - newErr);
+            err = newErr;
+        }
+        
         delete h;
 
         it++;
 
-        //if (it < 100 || err < eps)
-            //delete h;
     }
 
     //std::cout << "Resultado\n\n";
 
     //std::cout << "Iteracoes: " << it << "\n";
-    //std::cout << "Erro: " << err << "\n\n";
+    std::cout << "Erro: " << err << "\n\n";
 
     //std::cout << "Matriz H:\n";
     //h->print();
@@ -317,7 +271,6 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
     //std::cout << "Matriz W * H:\n";
     //((*w) * h)->print();
-
 
     return w;
 }
