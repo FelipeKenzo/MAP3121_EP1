@@ -251,6 +251,8 @@ void Matrix::setColumn(unsigned m, std::vector<double>* newColumn)
 }
 
 void Matrix::setValues(std::vector<std::vector<double>*>* newValues){
+    delete values;
+    
     values = newValues;
     n = newValues->size();
     m = (*newValues)[0]->size();

@@ -1,9 +1,9 @@
 #include "Tester.h"
 
-Tester::Tester(std::string filePath, Classificator* classificators[10]) :
-    testfilePath(testfilePath), verificationFilePath(verificationFilePath) classificators(classificators) {
+Tester::Tester(std::string testFilePath, std::string verificationFilePath, Classificator* classificators[10]) :
+    testFilePath(testFilePath), verificationFilePath(verificationFilePath), classificators(classificators) {
         //constructor
-        a = new Matrix(filePath, 784);
+        a = new Matrix(testFilePath, 784);
     }
 
 Tester::~Tester(){

@@ -10,7 +10,7 @@
 
 class Tester{
     public:
-        Tester(std::string testfilePath, std::string verificationFilePath, Classificator* classificators[10]);
+        Tester(std::string testFilePath, std::string verificationFilePath, Classificator* classificators[10]);
         ~Tester();
 
         void test(unsigned n_test, unsigned p);//Same p used in trainning
@@ -22,7 +22,7 @@ class Tester{
         std::vector<double>* errors;
 
         Classificator** classificators;
-        std::string testfilePath;
+        std::string testFilePath;
         std::string verificationFilePath;
         
 

@@ -148,8 +148,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
     unsigned it = 0;
     double err = 1;
+    double dErr = 1;
 
-    while (it < 100 && err > eps) {
+    while (it < 100 && dErr > eps) {
         std::cout << "It: " << it << "\n";
         //std::cout << "=== iteracao: " << it << " ===\n";
         //std::cout << "======= erro: " << err << " ===\n";
@@ -265,13 +266,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
                     w->setValue(i, j, 0); 
                 }
             }                
-        }
-
-        //std::cout << "Matriz W redefinida";
-        //w->print();   
-
+        
         //Calculating error
-        /*
+        //*
         err = 0;
 
         Matrix* wxh = (*w) * h;
@@ -289,6 +286,14 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }
         }
         delete wxh;
+        }
+
+        dErr = fabs(dErr - err);
+        std::cout << "dErr: " << dErr << "\n";
+
+        //std::cout << "Matriz W redefinida";
+        //w->print();   
+
         //*/
 
         delete h;
