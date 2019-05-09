@@ -168,7 +168,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }
         }
         //auto c_finish = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> c_elapsed = c_finish - c_start;
+        //std::chrono::duration<double> c_elapsed = c_finish - c_start;
 
         //std::cout << "Copy time: " << c_elapsed.count() << "\n";
 

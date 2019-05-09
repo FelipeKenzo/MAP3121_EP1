@@ -8,7 +8,7 @@
 #include "MatrixOp.h"
 
 int main() {
-
+    /*
    //*
     auto p_start = std::chrono::high_resolution_clock::now();
 
@@ -42,11 +42,12 @@ int main() {
     std::chrono::duration<double> qr_elapsed = qr_finish - p_start;
     
     std::cout << "QR elapsed time: " << qr_elapsed.count() << "\n\n";
-    //*/
-
-    //*
-    auto t1_start = std::chrono::high_resolution_clock::now();
+    
+    
     std::cout << "==========[Primeira Tarefa]==========\n";
+
+    auto t1_start = std::chrono::high_resolution_clock::now();
+
     std::cout << "a)\n\n";
 
     Matrix* w_a = new Matrix(64, 64);
@@ -159,8 +160,7 @@ int main() {
 
     std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
 
-    //*/
-    
+ 
     std::cout << "======== [Segunda Tarefa] =========\n";
     auto t2_start = std::chrono::high_resolution_clock::now();
 
@@ -188,11 +188,15 @@ int main() {
 
     std::cout << "Tarefa 2 elapsed time: " << t2_elapsed.count() << "\n\n";
     
-    //*
+    */
+
+
     std::cout << "======== [Tarefa Principal] =========\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
 
     Classificator* classificators[10];
+    Tester* tester("test_images", "test_index", )
+
         for (unsigned i = 0; i < 10; i++){
             std::cout << "Inicializando classificador d" << i << ".\n";
             
@@ -209,17 +213,21 @@ int main() {
             std::cout << "Treinou.\nTraining elapsed time: " << train_elapsed.count() <<"\n\n";
         }
 
+
+
+
     auto tp_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> tp_elapsed = tp_finish - tp_start;
     
-    std::cout << "\nTarefa Principal elapsed time: " << tp_elapsed.count() << "\n";
-    //*/
+    std::cout << "\nTarefa Principal elapsed time: " << tp_elapsed.count() << "\n";    
     
+    /*
     
     auto p_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> p_elapsed = p_finish - p_start;
     
     std::cout << "\nTotal elapsed time: " << p_elapsed.count() << "\n";
-
+    
     return 0;
+    */
 }

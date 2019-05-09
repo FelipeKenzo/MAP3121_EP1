@@ -1,7 +1,7 @@
 #include "Tester.h"
 
 Tester::Tester(std::string filePath, Classificator* classificators[10]) :
-    filePath(filePath), classificators(classificators) {
+    testfilePath(testfilePath), verificationFilePath(verificationFilePath) classificators(classificators) {
         //constructor
         a = new Matrix(filePath, 784);
     }
@@ -17,21 +17,34 @@ void Tester::test(unsigned n_test, unsigned p){
     errors = new std::vector<double>(n_test);
     Matrix* h = new Matrix(p, n_test);
     Matrix* c = new Matrix(748, n_test);
+    //Copy of a containing only the n_test relevant columns
+    Matrix* a_test = new Matrix(748, n_test);
 
+    //Copies the a_test from a
+        for(unsigned i = 1; i <= 748; i++){
+            for(unsigned j = 1 ; j <= n_test; j++){
+                a_test->setValue(i,j, a->at(i,j)); 
+            }
+        }
 
     double c_norm;
 
-    Matrix* classifiers[10];
-
     for(unsigned k = 0; k < 10; k++){
-        c_norm = 0;
+       
+        c_norm = 0;        
 
-        //wd matrix
-        classifiers[k] = new Matrix(classificators[k]->getWd()->getValues());
+        //Modifies wd and a_test 
+        h = solveLinearSystems(classificators[k]->getWd(), a_test);
+                /*---!!! FALTA FAZER A CÓPIA DE WD  !!!---*/
 
-        //Altera o valor de A e de wd, precisa fazer cópias
-        h = solveLinearSystems(classifiers[k], this->a);
-        c = a - ((classifiers[k]) * h);
+        //Copies the a_test again due to modification
+        for(unsigned i = 1; i <= 748; i++){
+            for(unsigned j = 1 ; j <= n_test; j++){
+                a_test->setValue(i,j, a->at(i,j)); 
+            }
+        }
+
+        c = (*a_test) - ((*(classificators[k]->getWd())) * h);
 
         for(unsigned j = 1; j <= n_test; j++ ){
 
@@ -50,4 +63,7 @@ void Tester::test(unsigned n_test, unsigned p){
 
     delete h;
     delete c;
+    delete a_test;
+
+    std::cout << "Test is over\n";
 }
