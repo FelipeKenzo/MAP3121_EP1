@@ -78,7 +78,7 @@ Matrix::Matrix(std::string filePath, unsigned n) {
             columnCount++;
     }
 
-    std::cout << columnCount << "\n";
+    //std::cout << columnCount << "\n";
 
     //allocates necessary space
     values->resize(n);
@@ -117,9 +117,18 @@ Matrix::~Matrix()
 {
     for (unsigned i = 0; i < values->size(); i++)
     {
+        //releasing memory
+        std::vector<double> empty{};
+        (*(*values)[i]).swap(empty);
+
+        //std::cout << "Values[i] capacity: " << (*(*values)[i]).capacity() << "\n";
+
         delete (*values)[i];
     }
 
+    //releasing memory
+    std::vector<std::vector<double>*> empty{};
+    (*values).swap(empty);
     delete values;
 }
 
@@ -298,8 +307,9 @@ unsigned Matrix::getNumberOfColumns()
 void Matrix::transpose()
 {
     std::vector<std::vector<double>*>* tValues= new std::vector<std::vector<double>*>();
+    
+    //Allocates new vector<vector>
     tValues->resize(m);
-
     for (unsigned i = 0; i < m; i++) {
         (*tValues)[i] = new std::vector<double>();
         (*tValues)[i]->resize(n);
@@ -313,7 +323,24 @@ void Matrix::transpose()
         }
     }
 
+    //freeing memory from old vector<vector>
+    
+    //std::cout << "Oi\n";
+    for (unsigned i = 0; i < values->size(); i++) {
+        //releasing memory
+        std::vector<double> empty{};
+        (*(*values)[i]).swap(empty);
+
+        //std::cout << "Values[i] capacity: " << (*(*values)[i]).capacity() << "\n";
+
+        delete (*values)[i];
+    }
+    //releasing memory
+    std::vector<std::vector<double>*> empty{};
+    (*values).swap(empty);
+    
     delete values;
+
     values = tValues;
 
     unsigned aux = m;

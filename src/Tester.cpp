@@ -76,7 +76,7 @@ void Tester::test(unsigned n_test, unsigned p){
             }
             c_norm = sqrt(c_norm);
 
-            if(k = 0){ 
+            if(k == 0){ 
                 errors->at(j-1) = c_norm;
             }else if(c_norm < errors->at(j-1)){
                 errors->at(j-1) = c_norm;
@@ -90,7 +90,7 @@ void Tester::test(unsigned n_test, unsigned p){
     delete c;
     delete a_test;
 
-    std::cout << "Test is over\n";
+    //std::cout << "Test is over\n";
 }
 
 void Tester::results() {
@@ -98,28 +98,30 @@ void Tester::results() {
     std::ifstream input;
     input.open(verificationFilePath);
     
-    double percentages[10];
     double hits[10];
     double quantity[10];
 
     for (unsigned i = 0; i < 10; i++) {
         hits[i] = 0;
         quantity[i] = 0;
-        percentages[i] = 0;
     }
 
     int din;
+    double totalHits = 0;
     for (unsigned i = 0; i < n_test; i++) {
         input >> din;
-        std::cout << "[" << din << ", " << (*mostProbableDigits)[i] << "] ";
+        //std::cout << "[" << din << ", " << (*mostProbableDigits)[i] << "] ";
         quantity[din]++;
         if ((*mostProbableDigits)[i] == din) {
             hits[din]++;
+            totalHits++;
         }
     }
     std::cout << "\n";
 
     input.close();
+
+    std::cout << "Overall accuracy: " << 100 * totalHits / double(n_test) << "%\n";
 
     for (unsigned i = 0; i < 10; i++) {
         std::cout << "Accuracy for digit " << i << ": ";

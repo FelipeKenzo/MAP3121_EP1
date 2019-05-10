@@ -11,7 +11,7 @@
 //#include "MatrixPersistence.h"
 
 int main() {
-    //*
+    /*
    //*
     auto p_start = std::chrono::high_resolution_clock::now();
 
@@ -194,64 +194,64 @@ int main() {
     //*/
 
     //*
-    std::cout << "======== [Tarefa Principal] =========\n";
+    std::cout << "======== [Tarefa Principal] =========\n\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
 
     Classificator* classificators[10];
-    //MatrixPersistence* persistence = new MatrixPersistence();
 
-        for (unsigned i = 0; i < 10; i++){
-            std::cout << "Inicializando classificador d " << i << "...\n";
-            
-            classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt");
-            std::cout << "classificador d" << i << " inicializado.\n";
-            
-            std::cout << "Iniciando treinamento d " << i << "...\n";
-            
-            auto train_start = std::chrono::high_resolution_clock::now();
-            try {
-                classificators[i]->train(10, 5);
-            } catch (std::invalid_argument* e) {
-                std::cout << "Erro: " << e->what() << "\n";
-            }
-            auto train_finish = std::chrono::high_resolution_clock::now();
+    std::cout << "=====================================\n"
+              << "====== n_digTreino: 500, p: 15 ======\n"
+              << "=====================================\n";
 
-            std::chrono::duration<double> train_elapsed = train_finish - train_start;
-            std::cout << "Treinou.\nTraining elapsed time: " << train_elapsed.count() <<"\n\n";
+    //*** Training Phase ***//
 
-            /*
-            std::cout << "Salvando matrix do classificador...\n";
-            persistence->save("classificator_100_5_" + std::to_string(i) + ".txt", classificators[i]->getWd());
-            
-            auto save_finish = std::chrono::high_resolution_clock::now();
-            train_elapsed = train_finish - save_finish;
-
-            std::cout << "Salvou.\nSaving elapsed time: " << train_elapsed.count() << "\n\n\n";
-            //*/
+    auto train_start = std::chrono::high_resolution_clock::now();
+    std::cout << "Training started...\n";
+    
+    for (unsigned i = 0; i < 10; i++) {
+        
+        classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt");
+        
+        try {
+            classificators[i]->train(500, 15);
+            //std::cout << i << "\n";
+        } catch (std::invalid_argument* e) {
+            std::cout << "Erro: " << e->what() << "\n";
         }
+    }
 
+    auto train_finish = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> train_elapsed = train_finish - train_start;
+    std::cout << "Finished. Elapsed time: " << train_elapsed.count() <<"\n\n";
+
+    //*** classification Phase ***//
+    //*
+    auto test_start = std::chrono::high_resolution_clock::now();
+    std::cout << "Classification started...\n";
     Tester tester("../dados_mnist/test_images.txt", "../dados_mnist/test_index.txt", classificators);
 
     try {
-        tester.test(1000, 5);
+        tester.test(10000, 15);
     } catch (std::invalid_argument* e) {
         std::cout << "Erro: " << e->what() << "\n";
     }
 
-    tester.results();
+    auto test_finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> test_elapsed = test_finish - test_start;
+    
+    std::cout << "Finished. Elapsed time: " << test_elapsed.count() <<"\n";
+    
+    std::cout << "---Results: \n";
 
+    tester.results();
+    //*/
 
     auto tp_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> tp_elapsed = tp_finish - tp_start;
-    
     std::cout << "\nTarefa Principal elapsed time: " << tp_elapsed.count() << "\n";    
+    
     //*/
 
-    
-    auto p_finish = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> p_elapsed = p_finish - p_start;
-    
-    std::cout << "\nTotal elapsed time: " << p_elapsed.count() << "\n";
-    
     return 0;
 }
