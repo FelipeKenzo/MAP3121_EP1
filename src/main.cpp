@@ -210,7 +210,7 @@ int main() {
             
             auto train_start = std::chrono::high_resolution_clock::now();
             try {
-                classificators[i]->train(10, 5);
+                classificators[i]->train(100, 10);
             } catch (std::invalid_argument* e) {
                 std::cout << "Erro: " << e->what() << "\n";
             }

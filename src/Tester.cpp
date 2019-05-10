@@ -76,7 +76,7 @@ void Tester::test(unsigned n_test, unsigned p){
             }
             c_norm = sqrt(c_norm);
 
-            if(k = 0){ 
+            if(k == 0){ 
                 errors->at(j-1) = c_norm;
             }else if(c_norm < errors->at(j-1)){
                 errors->at(j-1) = c_norm;
