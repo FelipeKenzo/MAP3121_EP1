@@ -203,7 +203,7 @@ int main() {
         for (unsigned i = 0; i < 10; i++){
             std::cout << "Inicializando classificador d " << i << "...\n";
             
-            classificators[i] = new Classificator("train_dig" + std::to_string(i) + ".txt");
+            classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt");
             std::cout << "classificador d" << i << " inicializado.\n";
             
             std::cout << "Iniciando treinamento d " << i << "...\n";
@@ -230,7 +230,7 @@ int main() {
             //*/
         }
 
-    Tester tester("test_images.txt", "test_index.txt", classificators);
+    Tester tester("../dados_mnist/test_images.txt", "../dados_mnist/test_index.txt", classificators);
 
     try {
         tester.test(1000, 5);

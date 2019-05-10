@@ -34,6 +34,7 @@ void Tester::test(unsigned n_test, unsigned p){
 
     double c_norm;
 
+
     for(unsigned k = 0; k < 10; k++){
         
         for(unsigned i = 1; i <= 784; i++){
@@ -75,7 +76,9 @@ void Tester::test(unsigned n_test, unsigned p){
             }
             c_norm = sqrt(c_norm);
 
-            if(c_norm < errors->at(j-1)){
+            if(k = 0){ 
+                errors->at(j-1) = c_norm;
+            }else if(c_norm < errors->at(j-1)){
                 errors->at(j-1) = c_norm;
                 mostProbableDigits->at(j-1) = (int)k;
             }
