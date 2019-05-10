@@ -200,7 +200,7 @@ int main() {
     Classificator* classificators[10];
 
     std::cout << "=====================================\n"
-              << "====== n_digTreino: 500, p: 15 ======\n"
+              << "====== n_digTreino: 1000, p: 15 ======\n"
               << "=====================================\n";
 
     //*** Training Phase ***//
@@ -213,7 +213,7 @@ int main() {
         classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt");
         
         try {
-            classificators[i]->train(500, 15);
+            classificators[i]->train(1000, 15);
             //std::cout << i << "\n";
         } catch (std::invalid_argument* e) {
             std::cout << "Erro: " << e->what() << "\n";
