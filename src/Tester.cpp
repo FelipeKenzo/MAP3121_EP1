@@ -1,4 +1,4 @@
-#include "Tester.h"
+#include "../include/Tester.h"
 
 Tester::Tester(std::string testFilePath, std::string verificationFilePath, Classificator* classificators[10]) :
     testFilePath(testFilePath), verificationFilePath(verificationFilePath), classificators(classificators) {
@@ -125,6 +125,9 @@ void Tester::results() {
 
     for (unsigned i = 0; i < 10; i++) {
         std::cout << "Accuracy for digit " << i << ": ";
-        std::cout << 100 * double(hits[i]) / double(quantity[i]) << "%\n";
+        if(double(quantity[i]) >= 1.0) 
+            std::cout << 100 * double(hits[i]) / double(quantity[i]) << "%\n";
+        else
+            std::cout << "No digit tested\n";
     }
 }

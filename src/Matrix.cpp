@@ -1,4 +1,4 @@
-#include "Matrix.h"
+#include "../include/Matrix.h"
 #define eps 1e-6
 
 Matrix::Matrix(unsigned n, unsigned m) :

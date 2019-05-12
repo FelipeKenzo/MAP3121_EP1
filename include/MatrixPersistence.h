@@ -5,7 +5,7 @@
 #include <fstream>
 #include <stdexcept>
 
-#include "Matrix.h"
+#include "../include/Matrix.h"
 
 class MatrixPersistence {
 public:

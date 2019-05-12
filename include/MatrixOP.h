@@ -8,7 +8,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "Matrix.h"
+#include "../include/Matrix.h"
 
     /** Returns cos and sin parameters used in Givens rotation linear operator **/
     double* getRGParameters(Matrix* w, unsigned i, unsigned j, unsigned k); 

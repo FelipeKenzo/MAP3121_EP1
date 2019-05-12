@@ -4,49 +4,19 @@
 #include <chrono>
 #include <stdexcept>
 
-#include "Classificator.h"
-#include "Matrix.h"
-#include "MatrixOp.h"
-#include "Tester.h"
+#include "../include/Classificator.h"
+#include "../include/Matrix.h"
+#include "../include/MatrixOp.h"
+#include "../include/Tester.h"
 //#include "MatrixPersistence.h"
 
-int main() {
-    /*
-   //*
-    auto p_start = std::chrono::high_resolution_clock::now();
+///***-------------------------------------------------------***///
+///***------------- FUNCTIONS DECLARATIONS ------------------***///
+///***------------ Main function at line 234 ----------------***//
+///***-------------------------------------------------------***// 
 
-    //*
-    std::vector<double>* a = new std::vector<double>{2, 1,  1, -1,  1};
-    std::vector<double>* b = new std::vector<double>{0, 3,  0,  1,  2};
-    std::vector<double>* c = new std::vector<double>{0, 0,  2,  2, -1};
-    std::vector<double>* d = new std::vector<double>{0, 0, -1,  1,  2};
-    std::vector<double>* e = new std::vector<double>{0, 0,  0,  3,  1};
+void primeiraTarefa(){
 
-    std::vector<std::vector<double>*>* m_values = new std::vector<std::vector<double>*>{a, b, c, d, e};
-
-    Matrix* m1 = new Matrix(m_values);
-
-    std::cout << "QR Factorization test: \n\n" << "W:";
-
-    m1->print();
-
-    try {
-    qrFactorization(m1);
-
-    } catch (std::range_error* e) {
-        std::cout << "Error: " << e->what() << "\n";
-    }
-
-    std::cout << "R:";
-
-    m1->print();
-
-    auto qr_finish = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> qr_elapsed = qr_finish - p_start;
-    
-    std::cout << "QR elapsed time: " << qr_elapsed.count() << "\n\n";
-    
-    
     std::cout << "==========[Primeira Tarefa]==========\n";
 
     auto t1_start = std::chrono::high_resolution_clock::now();
@@ -163,8 +133,11 @@ int main() {
 
     std::cout << "Tarefa 1 elapsed time: " << t1_elapsed.count() << "\n\n";
 
- 
-    std::cout << "======== [Segunda Tarefa] =========\n";
+}
+
+void segundaTarefa(){
+
+        std::cout << "======== [Segunda Tarefa] =========\n";
     auto t2_start = std::chrono::high_resolution_clock::now();
 
     Matrix* at2 = new Matrix(3, 3);
@@ -194,14 +167,18 @@ int main() {
     //*/
 
     //*
+}
+
+void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p){
+
     std::cout << "======== [Tarefa Principal] =========\n\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
 
     Classificator* classificators[10];
 
-    std::cout << "=====================================\n"
-              << "====== n_digTreino: 1000, p: 15 ======\n"
-              << "=====================================\n";
+    std::cout << "======================================\n"
+              << "====== n_digTreino: " << n_digTreino <<", p: " << p << " ======\n"
+              << "======================================\n";
 
     //*** Training Phase ***//
 
@@ -213,11 +190,12 @@ int main() {
         classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt");
         
         try {
-            classificators[i]->train(1000, 15);
+            classificators[i]->train(n_digTreino, p);
             //std::cout << i << "\n";
         } catch (std::invalid_argument* e) {
             std::cout << "Erro: " << e->what() << "\n";
         }
+        std::cout<< "Training progress: " << (i+1) * 10 <<"%\n";
     }
 
     auto train_finish = std::chrono::high_resolution_clock::now();
@@ -232,7 +210,7 @@ int main() {
     Tester tester("../dados_mnist/test_images.txt", "../dados_mnist/test_index.txt", classificators);
 
     try {
-        tester.test(10000, 15);
+        tester.test(n_test, p);
     } catch (std::invalid_argument* e) {
         std::cout << "Erro: " << e->what() << "\n";
     }
@@ -252,6 +230,78 @@ int main() {
     std::cout << "\nTarefa Principal elapsed time: " << tp_elapsed.count() << "\n";    
     
     //*/
+}
+
+///***---------------- MAIN ----------------***///
+
+int main() {
+
+    /*
+    auto p_start = std::chrono::high_resolution_clock::now();
+
+    //*
+    std::vector<double>* a = new std::vector<double>{2, 1,  1, -1,  1};
+    std::vector<double>* b = new std::vector<double>{0, 3,  0,  1,  2};
+    std::vector<double>* c = new std::vector<double>{0, 0,  2,  2, -1};
+    std::vector<double>* d = new std::vector<double>{0, 0, -1,  1,  2};
+    std::vector<double>* e = new std::vector<double>{0, 0,  0,  3,  1};
+
+    std::vector<std::vector<double>*>* m_values = new std::vector<std::vector<double>*>{a, b, c, d, e};
+
+    Matrix* m1 = new Matrix(m_values);
+
+    std::cout << "QR Factorization test: \n\n" << "W:";
+
+    m1->print();
+
+    try {
+    qrFactorization(m1);
+
+    } catch (std::range_error* e) {
+        std::cout << "Error: " << e->what() << "\n";
+    }
+
+    std::cout << "R:";
+
+    m1->print();
+
+    auto qr_finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> qr_elapsed = qr_finish - p_start;
+    
+    std::cout << "QR elapsed time: " << qr_elapsed.count() << "\n\n";
+    
+    */
+
+    unsigned n_digTreino, n_test;
+    unsigned p;
+
+    auto t_start = std::chrono::high_resolution_clock::now();
+
+
+    primeiraTarefa();
+    segundaTarefa();
+
+    std::cout << "======= Dados para a Tarefa Principal =======\n";
+    std::cout << "Insira o numero de imagens usadas no treino: ";
+    std::cin >> n_digTreino;
+    std::cout << "\nInsira o numero de imagens a serem classificadas: ";
+    std::cin >> n_test;
+    std::cout << "\nInsira a precisao (p): ";
+    std::cin >> p;
+
+    tarefaPrincipal(n_digTreino, n_test, p);
+
+    auto t_finish = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> t_elapsed = t_finish - t_start;
+
+    std::cout << "\n\nTempo total de execução do programa: " << t_elapsed.count() << "\n\n";
+ 
+
 
     return 0;
 }
+
+
+
+

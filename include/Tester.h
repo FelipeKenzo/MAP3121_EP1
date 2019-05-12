@@ -5,9 +5,9 @@
 #include <string>
 #include <fstream>
 
-#include "Classificator.h"
-#include "Matrix.h"
-#include "MatrixOp.h"
+#include "../include/Classificator.h"
+#include "../include/Matrix.h"
+#include "../include/MatrixOp.h"
 
 class Tester{
     public:

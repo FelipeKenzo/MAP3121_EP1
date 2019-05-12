@@ -1,4 +1,4 @@
-#include "Classificator.h"
+#include "../include/Classificator.h"
 
 Classificator::Classificator(std::string filePath) :
     filePath(filePath) {
