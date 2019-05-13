@@ -34,14 +34,11 @@ void rotGivens(Matrix* w, unsigned i, unsigned j, double c, double s)
     unsigned m = w->getNumberOfColumns();
 
     for (unsigned r = 1; r <= m; r++){
-        //std::cout << "Acessando w[" << i << "][" << r
-        //          << "] e w[" << j << "][" << r << "]\n";
         aux = c * w->at(i, r) - s * w->at(j, r);
         w->setValue(j, r, ((s * w->at(i,r)) + (c * w->at(j, r))));
         w->setValue(i, r, aux);
     }
 
-    //std::cout << "rotGivens completo->\n";
     return;
 }
 
@@ -58,14 +55,11 @@ void qrFactorization(Matrix* w)
         for(j = n; j >= k + 1; j--){
             i = j - 1;
             if(fabs(w->at(j, k)) > eps){
-                //std::cout << "rotGivens para zerar r(" << j << ", " << k << ")\n";
                 double* params = getRGParameters(w, i, j, k);
                 c = params[0];
                 s = params[1];
-                //std::cout << "parametros: c = " << c << ", s = " << s <<"\n";
                 rotGivens(w, i, j, c, s);
                 delete params;
-                //w->print();
             }
         }
     }
@@ -84,7 +78,6 @@ Matrix* solveLinearSystems(Matrix* w, Matrix* a) { //W * H = A
     for(unsigned k = 1; k <= p; k++){
         for(unsigned j = n; j >= k + 1; j--){
             unsigned i = j - 1;
-            //std::cout << "r[" << j << "][" << k << "]\n";
             if(fabs(w->at(j, k)) > eps){
                 double* params = getRGParameters(w, i, j, k);
                 c = params[0];
@@ -96,16 +89,10 @@ Matrix* solveLinearSystems(Matrix* w, Matrix* a) { //W * H = A
         }
     }
 
-    //std::cout << "Matriz R:";
-    //r->print();
-    //std::cout << "Matriz blinha:";
-    //newB->print();
-
     for (unsigned k = p; k >= 1; k--) {
         for (unsigned j = 1; j <= m; j++) {
             double aux = 0;
             for (unsigned i = k + 1; i <= p; i++) {
-                //std::cout << "k: " << k << " j: " << j << " i: " << i << "\n";
                 aux += w->at(k, i) * h->at(i, j);
             }
             
@@ -141,20 +128,15 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     unsigned it = 0;
 
     while (it < 100) {
-        /*------! Criando uma cópia de A !-----*/
         
-        //*
-        //std::cout << "b\n";
+        /*------! Criando uma cópia de A !-----*/
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
                 a2->setValue(i,j, a->at(i,j));
             }
         }
-        //*/
         
         /*-------!  Normalização W  !---------*/
-        //*
-        //std::cout << "c\n";
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double aux = 0;
             
@@ -166,15 +148,10 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }          
         }
 
-        //*/
-
         /*-----!    MMQ para determinar h     !-----*/
-        //std::cout << "d\n";
         h = solveLinearSystems(w, a2);
 
         /*-----!      Redefinição de h       !------*/
-        //*
-        //std::cout << "e\n";
         for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= h->getNumberOfColumns(); j++){                
                 if(h->at(i,j) < -eps){                
@@ -182,58 +159,33 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
                 }
             }                
         }
-        //*/
 
         /*-----! Computação de A original transposta  !-----*/
         //reseta os valores de a2 aos da matriz original.
-        
-        //*
-        //std::cout << "f\n";
+
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
                 a2->setValue(i,j, a->at(i,j));
             }
         }
-        //*/
 
-        //std::cout << "g\n";
-        a2->transpose();
-        
-        /*
-        Matrix* ht = new Matrix (p, m);
-        
-        for(unsigned i = 1; i <= p; i++){
-            for(unsigned j = 1; j <= m; j++){
-                ht->setValue(i,j, h->at(i,j));
-            }
-        }
-        
-        ht->transpose();
-
-        //*/
-
+    
         /*-----!      MMQ das Transpostas    !-----*/
         
-        //std::cout << "h\n";
+        a2->transpose();
         h->transpose();
 
-        //std::cout << "i\n";
         wt = solveLinearSystems(h, a2);
 
-        //delete ht;
-        //delete a2;
         delete h;
 
         /*-----!      Computação de w        !-----*/
-        //std::cout << "j\n";
         wt->transpose(); //Destranspõe W transposta
 
         delete w;
         w = wt;
 
         /*-----!     Redefinição de w        !-----*/
-        //*
-        //std::cout << "k\n";
         for (unsigned i = 1; i <= w->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= w->getNumberOfColumns(); j++){
                 if(w->at(i, j) < -eps){
@@ -242,8 +194,6 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }
         }                
         
-        //*/
-
         //Calculating error
         /*
         Matrix* wxh = (*w) * h;

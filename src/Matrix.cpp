@@ -78,8 +78,6 @@ Matrix::Matrix(std::string filePath, unsigned n) {
             columnCount++;
     }
 
-    //std::cout << columnCount << "\n";
-
     //allocates necessary space
     values->resize(n);
     for (unsigned i = 0; i < values->size(); i++)
@@ -121,14 +119,13 @@ Matrix::~Matrix()
         std::vector<double> empty{};
         (*(*values)[i]).swap(empty);
 
-        //std::cout << "Values[i] capacity: " << (*(*values)[i]).capacity() << "\n";
-
         delete (*values)[i];
     }
 
     //releasing memory
     std::vector<std::vector<double>*> empty{};
     (*values).swap(empty);
+    
     delete values;
 }
 
@@ -324,9 +321,7 @@ void Matrix::transpose()
     }
 
     //freeing memory from old vector<vector>
-    
-    //std::cout << "Oi\n";
-    for (unsigned i = 0; i < values->size(); i++) {
+        for (unsigned i = 0; i < values->size(); i++) {
         //releasing memory
         std::vector<double> empty{};
         (*(*values)[i]).swap(empty);
@@ -372,7 +367,6 @@ Matrix* Matrix::operator+(Matrix* M)
     
 Matrix* Matrix::operator-(Matrix* M)
 {
-    //std::cout << n << " x " << m << " - " << M->getNumberOfLines() << " x " << M->getNumberOfColumns() << "\n";
     if (M->getNumberOfLines() != n || M->getNumberOfColumns() != m)
     {
         throw new std::invalid_argument("incompatible dimensions");
@@ -393,15 +387,12 @@ Matrix* Matrix::operator-(Matrix* M)
 
 Matrix* Matrix::operator*(Matrix* m)
 {
-    //std:: cout << this->m << " e " << m->getNumberOfLines() << "\n";
     if (this->m != m->getNumberOfLines())
     {
         throw new std::invalid_argument("incompatible dimensions");
     }
 
     Matrix* mult = new Matrix(n, m->getNumberOfColumns());
-
-    //std::cout << "Multiplicação eh " << n << " x " << mult->getNumberOfColumns() << "\n";
 
     for (unsigned i = 1; i <= mult->getNumberOfLines(); i++)
     {
@@ -410,8 +401,6 @@ Matrix* Matrix::operator*(Matrix* m)
             double sum = 0;
             for (unsigned k = 1; k <= this->m; k++)
             {
-                //std::cout << "left[" << i << "][" << k << "] * "
-                //         << "right[" << k << "][" << j << "]\n";
                 sum += (*(*values)[i-1])[k-1] * m->at(k, j);
             }
             mult->setValue(i, j, sum);

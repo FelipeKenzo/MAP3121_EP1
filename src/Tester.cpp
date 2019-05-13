@@ -55,17 +55,8 @@ void Tester::test(unsigned n_test, unsigned p){
             }
         }
 
-        //std::cout << "  Wd eh " << Wd_test->getNumberOfLines() << " x " << Wd_test->getNumberOfColumns() << "\n";
-        //std::cout << "   H eh " << h->getNumberOfLines() << " x " << h->getNumberOfColumns() << "\n";
-
         Matrix* Wdh = (*(classificators[k]->getWd())) * h;
-        
-        
-        //std::cout << "Wd*H eh " << Wdh->getNumberOfLines() << " x " << Wdh->getNumberOfColumns() << "\n";
-        //std::cout << "   A eh " << a_test->getNumberOfLines() << " x " << a_test->getNumberOfColumns() << "\n";
         c = (*a_test) - Wdh;
-
-        //std::cout << "   C eh " << a_test->getNumberOfLines() << " x " << a_test->getNumberOfColumns() << "\n";
 
         delete Wdh;
 
@@ -89,8 +80,6 @@ void Tester::test(unsigned n_test, unsigned p){
     delete h;
     delete c;
     delete a_test;
-
-    //std::cout << "Test is over\n";
 }
 
 void Tester::results() {
@@ -110,7 +99,6 @@ void Tester::results() {
     double totalHits = 0;
     for (unsigned i = 0; i < n_test; i++) {
         input >> din;
-        //std::cout << "[" << din << ", " << (*mostProbableDigits)[i] << "] ";
         quantity[din]++;
         if ((*mostProbableDigits)[i] == din) {
             hits[din]++;
