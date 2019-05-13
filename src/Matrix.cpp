@@ -129,7 +129,7 @@ Matrix::~Matrix()
     delete values;
 }
 
-void Matrix::print()
+void Matrix::print(unsigned precision)
 {
     if (m < 1 || n < 1)
         throw new std::length_error("Dimensional error");
@@ -192,12 +192,18 @@ void Matrix::print()
 
             //Resolver o zero negativo
             if (fabs((*(*values)[i])[j]) < eps) {
-                std::cout << "0.000000 ";    
+                std::cout << "0";
+                if (precision > 0)
+                    std::cout << ".";
+                for (unsigned i = 0; i < precision; i++) {
+                    std::cout << "0";
+                }
+                std::cout << " ";
             }
             //imprime o valor com precisao de 6 casas decimais
             else {
                 std::cout << std::fixed
-                        << std::setprecision(6) 
+                        << std::setprecision(precision) 
                         << (*(*values)[i])[j] << " ";
             }
         }

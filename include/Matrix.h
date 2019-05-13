@@ -20,7 +20,7 @@ public:
     Matrix(std::string filePath, unsigned n);
     ~Matrix();
 
-    void print(); // maximum matrix size is 9x9. It is pretty slow.
+    void print(unsigned precision); // maximum matrix size is 9x9. It is pretty slow.
 
     void setValue(unsigned n, unsigned m, double newValue);
     void setRow(unsigned n, std::vector<double>* newRow);

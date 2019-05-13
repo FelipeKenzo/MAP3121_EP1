@@ -39,9 +39,11 @@ void primeiraTarefa(){
         }
     }
 
+    w_a->print(0);
+
     Matrix* x_a = solveLinearSystems(w_a, b_a);
     std::cout << "x_a:";
-    x_a->print();
+    x_a->print(5);
 
     delete w_a;
     delete b_a;
@@ -65,7 +67,7 @@ void primeiraTarefa(){
     Matrix* x_b = solveLinearSystems(w_b, b_b);
 
     std::cout << "x_b:";
-    x_b->print();
+    x_b->print(5);
 
     std::cout << "c)\n\n";
 
@@ -88,7 +90,7 @@ void primeiraTarefa(){
 
     Matrix* x_c = solveLinearSystems(w_c, b_c);
     std::cout << "x_c:";
-    x_c->print();
+    x_c->print(5);
 
     std::cout << "d)\n\n";
 
@@ -109,7 +111,7 @@ void primeiraTarefa(){
 
     Matrix* x_d = solveLinearSystems(w_d, b_d);
     std::cout << "x_d:";
-    x_d->print();
+    x_d->print(5);
 
     auto t1_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> t1_elapsed = t1_finish - t1_start;
@@ -136,11 +138,11 @@ void segundaTarefa(){
     at2->setRow(3, a3);
 
     std::cout << "Matriz A:\n";
-    at2->print();
+    at2->print(5);
 
     std::cout << "Matriz W:\n";
     w = (nonNegativeFactorization(at2, 3, 2));
-    w->print();
+    w->print(5);
 
     auto t2_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> t2_elapsed = t2_finish - t2_start;
