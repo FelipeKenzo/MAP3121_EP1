@@ -160,7 +160,7 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
     Classificator* classificators[10];
 
     std::cout << "======================================\n"
-              << "n_digTreino: " << n_digTreino <<", p: " << p << "\n"
+              << "n_digTreino: " << n_digTreino <<", p: " << p << ", n_test: " << n_test << "\n"
               << "multi_threading: " << std::boolalpha << multithreading << "\n"
               << "======================================\n";
 
@@ -238,7 +238,6 @@ int main(int argc, char* argv[]) {
             if (arg == "-nt") {
                 if (i + 1 < argc) {
                     arguments[0] = true;
-                    std::cout << argv[i] << "\n";
                     n_digTreino = std::stoi(argv[++i], nullptr, 0);
                 }
             }
