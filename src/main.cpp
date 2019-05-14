@@ -3,12 +3,13 @@
 #include <cmath>
 #include <chrono>
 #include <stdexcept>
+#include <thread>
+//#include <stdlib.h>
 
 #include "../include/Classificator.h"
 #include "../include/Matrix.h"
 #include "../include/MatrixOp.h"
 #include "../include/Tester.h"
-//#include "MatrixPersistence.h"
 
 ///***-------------------------------------------------------***///
 ///***------------- FUNCTIONS DECLARATIONS ------------------***///
@@ -39,7 +40,7 @@ void primeiraTarefa(){
         }
     }
 
-    w_a->print(0);
+    //w_a->print(0);
 
     Matrix* x_a = solveLinearSystems(w_a, b_a);
     std::cout << "x_a:";
@@ -151,7 +152,7 @@ void segundaTarefa(){
     
 }
 
-void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p){
+void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool multithreading){
 
     std::cout << "======== [Tarefa Principal] =========\n\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
@@ -159,24 +160,34 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p){
     Classificator* classificators[10];
 
     std::cout << "======================================\n"
-              << "====== n_digTreino: " << n_digTreino <<", p: " << p << " ======\n"
+              << "n_digTreino: " << n_digTreino <<", p: " << p << "\n"
+              << "multi_threading: " << std::boolalpha << multithreading << "\n"
               << "======================================\n";
 
     //*** Training Phase ***//
 
     auto train_start = std::chrono::high_resolution_clock::now();
     std::cout << "Training started...\n";
+
+    std::thread t[10];
     
     for (unsigned i = 0; i < 10; i++) {
-        
-        classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt");
-        
-        try {
-            classificators[i]->train(n_digTreino, p);
-        } catch (std::invalid_argument* e) {
-            std::cout << "Erro: " << e->what() << "\n";
+
+        classificators[i] = new Classificator("../dados_mnist/train_dig" + std::to_string(i) + ".txt", i);
+            
+        if (multithreading) {    
+            t[i] = std::thread(&Classificator::train, classificators[i], n_digTreino, p, multithreading);
         }
-        std::cout<< "Training progress: " << (i+1) * 10 <<"%\n";
+        else {
+            classificators[i]->train(n_digTreino, p, multithreading);
+            std::cout<< "Training progress: " << (i+1) * 10 <<"%\n";
+        }
+    }
+    
+    if (multithreading) {
+        for (unsigned i = 0; i < 10; i++) {
+            t[i].join();
+        }
     }
 
     auto train_finish = std::chrono::high_resolution_clock::now();
@@ -213,26 +224,71 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p){
 
 ///***---------------- MAIN ----------------***///
 
-int main() {
+int main(int argc, char* argv[]) {
 
-    unsigned n_digTreino, n_test;
-    unsigned p;
+    bool arg = false;
+    bool multi = false;
+    unsigned n_digTreino, n_test, p;
+    bool arguments[3] = {false, false, false};
+
+    if (argc > 1) {
+        arg = true;
+        for (int i = 1; i < argc; i++) {
+            std::string arg = argv[i];
+            if (arg == "-nt") {
+                if (i + 1 < argc) {
+                    arguments[0] = true;
+                    std::cout << argv[i] << "\n";
+                    n_digTreino = std::stoi(argv[++i], nullptr, 0);
+                }
+            }
+            else if (arg == "-nc") {
+                if (i + 1 < argc) {
+                    arguments[1] = true;
+                    n_test = std::stoi(argv[++i], nullptr, 0);
+                }
+            }
+            else if (arg == "-p") {
+                if (i + 1 < argc) {
+                    arguments[2] = true;
+                    p = std::stoi(argv[++i], nullptr, 0);
+                }
+            }
+            else if (arg == "-mt" || arg == "multithreading") {
+                multi = true;
+            }
+            else {
+                std::cerr << "invalid argument(s)." << std::endl;
+                return 1;
+            }
+        }
+    }
+
+
 
     auto t_start = std::chrono::high_resolution_clock::now();
 
     primeiraTarefa();
-    
+
     segundaTarefa();
 
-    std::cout << "======= Dados para a Tarefa Principal =======\n";
-    std::cout << "Insira o numero de imagens usadas no treino: ";
-    std::cin >> n_digTreino;
-    std::cout << "\nInsira o numero de imagens a serem classificadas: ";
-    std::cin >> n_test;
-    std::cout << "\nInsira a precisao (p): ";
-    std::cin >> p;
+    if (!(arguments[0] && arguments [1] && arguments[2])) {
+        std::cout << "======= Dados para a Tarefa Principal =======\n";
+    }
+    if (!arguments[0]) {
+        std::cout << "Insira o numero de imagens usadas no treino: ";
+        std::cin >> n_digTreino;
+    }
+    if (!arguments[1]) {
+        std::cout << "\nInsira o numero de imagens a serem classificadas: ";
+        std::cin >> n_test;
+    }
+    if (!arguments[2]) {
+        std::cout << "\nInsira a precisao (p): ";
+        std::cin >> p;
+    }
 
-    tarefaPrincipal(n_digTreino, n_test, p);
+    tarefaPrincipal(n_digTreino, n_test, p, multi);
 
     auto t_finish = std::chrono::high_resolution_clock::now();
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <thread>
 
 #include "../include/Classificator.h"
 #include "../include/Matrix.h"
@@ -19,7 +20,7 @@ class Tester{
         void results();
 
     private:
-        unsigned n_test;
+        unsigned n_test = 0;
 
         Matrix* a;
         std::vector<int>* mostProbableDigits;

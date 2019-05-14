@@ -23,6 +23,4 @@
 
     Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p);
 
-    void classificationCase (unsigned n_digTreino, unsigned );
-
 #endif

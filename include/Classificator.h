@@ -9,10 +9,10 @@
 
 class Classificator {
 public:
-    Classificator(std::string filePath);
+    Classificator(std::string filePath, int dig);
     ~Classificator();
 
-    void train(unsigned ndig_treino, unsigned p);
+    void train(unsigned ndig_treino, unsigned p, bool multithreading);
 
     Matrix* getWd();
 

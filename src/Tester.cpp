@@ -34,7 +34,6 @@ void Tester::test(unsigned n_test, unsigned p){
 
     double c_norm;
 
-
     for(unsigned k = 0; k < 10; k++){
         
         for(unsigned i = 1; i <= 784; i++){
