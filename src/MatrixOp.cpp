@@ -120,6 +120,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
     /*-----! Inicialização aleatória da matriz Wd !-----*/
 
+    srand(5);
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
