@@ -196,7 +196,7 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
     std::cout << "Finished. Elapsed time: " << train_elapsed.count() <<"\n\n";
 
     for (int i = 0; i < 10; i++) {
-        (*classificators[0]).saveParameterMatrix("mamadeira" + std::to_string(i) + ".txt", i);
+        (*classificators[5]).saveParameterMatrix("dig5_" + std::to_string(i) + ".txt", i);
     }
 
     //*** classification Phase ***//
