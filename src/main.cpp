@@ -226,13 +226,12 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
 
 int main(int argc, char* argv[]) {
 
-    bool arg = false;
     bool multi = false;
     unsigned n_digTreino, n_test, p;
     bool arguments[3] = {false, false, false};
+    bool assignments[3] = {true, true, true};
 
     if (argc > 1) {
-        arg = true;
         for (int i = 1; i < argc; i++) {
             std::string arg = argv[i];
             if (arg == "-nt") {
@@ -240,11 +239,19 @@ int main(int argc, char* argv[]) {
                     arguments[0] = true;
                     n_digTreino = std::stoi(argv[++i], nullptr, 0);
                 }
+                else {
+                    std::cerr << "-nt requires a parameter" << std::endl;
+                    return 1;
+                }
             }
             else if (arg == "-nc") {
                 if (i + 1 < argc) {
                     arguments[1] = true;
                     n_test = std::stoi(argv[++i], nullptr, 0);
+                }
+                else {
+                    std::cerr << "-nc requires a parameter" << std::endl;
+                    return 1;
                 }
             }
             else if (arg == "-p") {
@@ -252,9 +259,32 @@ int main(int argc, char* argv[]) {
                     arguments[2] = true;
                     p = std::stoi(argv[++i], nullptr, 0);
                 }
+                else {
+                    std::cerr << "-p requires a parameter" << std::endl;
+                    return 1;
+                }
             }
             else if (arg == "-mt" || arg == "multithreading") {
                 multi = true;
+            }
+            else if (arg == "-a") {
+                if (i + 1 < argc) {
+                    int param = std::stoi(argv[++i]);
+                    if (param > 0 && param < 4) {
+                        for (unsigned j = 0; j < 3; j++) {
+                            if (j != param - 1)
+                                assignments[j] = false;
+                        }
+                    }
+                    else {
+                        std::cerr << "invalid parameter for -a (should either be 1, 2 or 3)." << std::endl;
+                        return 1;
+                    }
+                }
+                else {
+                    std::cerr << "-a requires a parameter" << std::endl;
+                    return 1;
+                }
             }
             else {
                 std::cerr << "invalid argument(s)." << std::endl;
@@ -267,27 +297,31 @@ int main(int argc, char* argv[]) {
 
     auto t_start = std::chrono::high_resolution_clock::now();
 
-    primeiraTarefa();
+    if (assignments[0])
+        primeiraTarefa();
 
-    segundaTarefa();
+    if (assignments[1])
+        segundaTarefa();
 
-    if (!(arguments[0] && arguments [1] && arguments[2])) {
-        std::cout << "======= Dados para a Tarefa Principal =======\n";
-    }
-    if (!arguments[0]) {
-        std::cout << "Insira o numero de imagens usadas no treino: ";
-        std::cin >> n_digTreino;
-    }
-    if (!arguments[1]) {
-        std::cout << "\nInsira o numero de imagens a serem classificadas: ";
-        std::cin >> n_test;
-    }
-    if (!arguments[2]) {
-        std::cout << "\nInsira a precisao (p): ";
-        std::cin >> p;
-    }
+    if (assignments[2]) {
+        if (!(arguments[0] && arguments [1] && arguments[2])) {
+            std::cout << "======= Dados para a Tarefa Principal =======\n";
+        }
+        if (!arguments[0]) {
+            std::cout << "Insira o numero de imagens usadas no treino: ";
+            std::cin >> n_digTreino;
+        }
+        if (!arguments[1]) {
+            std::cout << "\nInsira o numero de imagens a serem classificadas: ";
+            std::cin >> n_test;
+        }
+        if (!arguments[2]) {
+            std::cout << "\nInsira o numero de colunas da Wd (p): ";
+            std::cin >> p;
+        }
 
-    tarefaPrincipal(n_digTreino, n_test, p, multi);
+        tarefaPrincipal(n_digTreino, n_test, p, multi);
+    }
 
     auto t_finish = std::chrono::high_resolution_clock::now();
 

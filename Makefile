@@ -1,5 +1,5 @@
 CXX		  := g++
-CXX_FLAGS := -Wall -Wextra -O4 -std=c++11
+CXX_FLAGS := -Wall -Wextra -O3 -std=c++11
 
 BIN		:= bin
 SRC		:= src
@@ -7,7 +7,7 @@ INCLUDE	:= include
 LIB		:= lib
 
 LIBRARIES	:=
-EXECUTABLE	:= main
+EXECUTABLE	:= map3121_ep1
 
 
 all: $(BIN)/$(EXECUTABLE)

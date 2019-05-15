@@ -118,6 +118,8 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     Matrix* wt; // must be deleted;
     Matrix* a2 = new Matrix(n, m); // must be deleted
 
+    /*-----! Inicialização randômica da matriz Wd !-----*/
+
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
