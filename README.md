@@ -30,7 +30,7 @@ Algumas *flags* foram implementadas por motivo de conveniência. São elas:
 ```
 ### Exemplo de uso:
 
- - `bin/./map3121_ep1 -nt 1000 -nc 10000 -p 15 -mt` -> Irá executar as três atividades, utilizando 1000 dígitos na fase de treino, 10000 dígitos na fase de classificação, dimensão p igual a 15 utilizará computação em paralelo.
+ - `bin/./map3121_ep1 -nt 1000 -nc 10000 -p 15 -mt` -> Irá executar as três atividades, utilizando 1000 dígitos na fase de treino, 10000 dígitos na fase de classificação, dimensão p igual a 15, e utilizará computação em paralelo.
 
  - `bin/./map3121_ep1 -a 3` -> Irá executar apenas a tarefa principal, porém solicitará que o usuário digite os parâmetros em tempo de execução.
  
