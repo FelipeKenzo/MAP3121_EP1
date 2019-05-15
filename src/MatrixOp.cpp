@@ -118,7 +118,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     Matrix* wt; // must be deleted;
     Matrix* a2 = new Matrix(n, m); // must be deleted
 
-    /*-----! Inicialização randômica da matriz Wd !-----*/
+    /*-----! Inicialização aleatória da matriz Wd !-----*/
 
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
@@ -128,8 +128,10 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     }
 
     unsigned it = 0;
+    double err = 1;
+    double dErr = 1;
 
-    while (it < 100) {
+    while (it < 100 && dErr > eps) {
         
         /*------! Criando uma cópia de A !-----*/
         for(unsigned i = 1; i <= n; i++){
@@ -179,8 +181,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
         wt = solveLinearSystems(h, a2);
 
-        delete h;
-
+        h->transpose();
         /*-----!      Computação de w        !-----*/
         wt->transpose(); //Destranspõe W transposta
 
@@ -190,25 +191,35 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         /*-----!     Redefinição de w        !-----*/
         for (unsigned i = 1; i <= w->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= w->getNumberOfColumns(); j++){
-                if(w->at(i, j) < -eps){
+                if(w->at(i, j) < 0){
                     w->setValue(i, j, 0); 
                 }
             }
         }                
         
         //Calculating error
-        /*
+        //*
+        //std::cout << "oi" << "\n";
+        //std::cout << "H eh " << h->getNumberOfLines() << " x " << h->getNumberOfColumns() << "\n";
+        //std::cout << "W eh " << w->getNumberOfLines() << " x " << w->getNumberOfColumns() << "\n";
+
         Matrix* wxh = (*w) * h;
+        delete h;
+        //std::cout << "oi\n";
+
         double newErr = 0;
         
         for(unsigned i = 1; i <= n; i++){
             for(unsigned j = 1; j <= m; j++){
                 //std::cout << "[" << i << "][" << j << "] ";
                 double aux = (a->at(i,j) - wxh->at(i,j));
-                newErr += aux * aux;
+                newErr += std::pow(aux, 2);
                 //std::cout << aux * aux << " " << err << "\n";
             }
         }
+
+        newErr = std::sqrt(newErr);
+
         delete wxh;
         //std::cout << "Erro calculado: " << newErr << "\n";
 
@@ -218,7 +229,10 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         }
         else {
             //std::cout << err << " - " << newErr << " = " << fabs(err - newErr) << "\n";
-            dErr = fabs(err - newErr);
+            dErr = std::abs(err - newErr)/newErr;
+            if (dErr < eps) {
+                //std::cout << "dErr convergiu: " << dErr << " em " << it << "\n";
+            }
             err = newErr;
         }
         //*/

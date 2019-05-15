@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 
 #include "../include/Matrix.h"
 #include "../include/MatrixOp.h"
@@ -13,6 +14,7 @@ public:
     ~Classificator();
 
     void train(unsigned ndig_treino, unsigned p, bool multithreading);
+    void saveParameterMatrix(const std::string& filePath, unsigned p);
 
     Matrix* getWd();
 

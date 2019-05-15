@@ -154,15 +154,15 @@ void segundaTarefa(){
 
 void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool multithreading){
 
-    std::cout << "======== [Tarefa Principal] =========\n\n";
+    std::cout << "========== [Tarefa Principal] =========\n\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
 
     Classificator* classificators[10];
 
-    std::cout << "======================================\n"
+    std::cout << "=======================================\n"
               << "n_digTreino: " << n_digTreino <<", p: " << p << ", n_test: " << n_test << "\n"
               << "multi_threading: " << std::boolalpha << multithreading << "\n"
-              << "======================================\n";
+              << "=======================================\n";
 
     //*** Training Phase ***//
 
@@ -194,6 +194,10 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
 
     std::chrono::duration<double> train_elapsed = train_finish - train_start;
     std::cout << "Finished. Elapsed time: " << train_elapsed.count() <<"\n\n";
+
+    for (int i = 0; i < 10; i++) {
+        (*classificators[0]).saveParameterMatrix("mamadeira" + std::to_string(i) + ".txt", i);
+    }
 
     //*** classification Phase ***//
 
@@ -316,11 +320,16 @@ int main(int argc, char* argv[]) {
             std::cin >> n_test;
         }
         if (!arguments[2]) {
-            std::cout << "\nInsira o numero de colunas da Wd (p): ";
+            std::cout << "\nInsira o numero de parametros (p): ";
             std::cin >> p;
         }
 
-        tarefaPrincipal(n_digTreino, n_test, p, multi);
+        try {
+            tarefaPrincipal(n_digTreino, n_test, p, multi);
+        }catch (std::invalid_argument* e) {
+            std::cout << "Erro: " << e->what() << "\n";
+            std::cout << __LINE__ << __FILE__ << "\n";
+        }
     }
 
     auto t_finish = std::chrono::high_resolution_clock::now();
