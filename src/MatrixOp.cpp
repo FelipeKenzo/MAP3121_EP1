@@ -120,7 +120,7 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
     /*-----! Inicialização aleatória da matriz Wd !-----*/
 
-    srand(5);
+    srand(57);
     for (unsigned i = 1; i <= w->getNumberOfLines(); i++) {
         for (unsigned j = 1; j <= w->getNumberOfColumns(); j++) {
             double random = double(rand() % 9 +1);
@@ -200,9 +200,6 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         
         //Calculating error
         //*
-        //std::cout << "oi" << "\n";
-        //std::cout << "H eh " << h->getNumberOfLines() << " x " << h->getNumberOfColumns() << "\n";
-        //std::cout << "W eh " << w->getNumberOfLines() << " x " << w->getNumberOfColumns() << "\n";
 
         Matrix* wxh = (*w) * h;
         delete h;

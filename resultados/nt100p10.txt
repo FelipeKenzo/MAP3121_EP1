@@ -1,0 +1,11 @@
+Overall accuracy: 89.73%
+Accuracy for digit 0: 97.7551%
+Accuracy for digit 1: 99.3833%
+Accuracy for digit 2: 89.438%
+Accuracy for digit 3: 82.7723%
+Accuracy for digit 4: 86.2525%
+Accuracy for digit 5: 86.2108%
+Accuracy for digit 6: 95.1983%
+Accuracy for digit 7: 91.3424%
+Accuracy for digit 8: 79.0554%
+Accuracy for digit 9: 88.3053%

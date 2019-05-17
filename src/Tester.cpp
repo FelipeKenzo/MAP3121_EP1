@@ -3,7 +3,7 @@
 Tester::Tester(std::string testFilePath, std::string verificationFilePath, Classificator* classificators[10]) :
     testFilePath(testFilePath), verificationFilePath(verificationFilePath), classificators(classificators) {
         //constructor
-        a = new Matrix(testFilePath, 7483);
+        a = new Matrix(testFilePath, 784);
     }
 
 Tester::~Tester(){
@@ -81,8 +81,8 @@ void Tester::test(unsigned n_test, unsigned p){
     delete a_test;
 }
 
-void Tester::results() {
-    
+void Tester::results()
+{    
     std::ifstream input;
     input.open(verificationFilePath);
     
@@ -104,7 +104,6 @@ void Tester::results() {
             totalHits++;
         }
     }
-    std::cout << "\n";
 
     input.close();
 
@@ -116,5 +115,55 @@ void Tester::results() {
             std::cout << 100 * double(hits[i]) / double(quantity[i]) << "%\n";
         else
             std::cout << "No digit tested\n";
+    }
+
+}
+    
+void Tester::results(const std::string& filePath)
+{
+    std::ifstream input;
+    input.open(verificationFilePath);
+
+    
+    double hits[10];
+    double quantity[10];
+
+    for (unsigned i = 0; i < 10; i++) {
+        hits[i] = 0;
+        quantity[i] = 0;
+    }
+
+    int din;
+    double totalHits = 0;
+    for (unsigned i = 0; i < n_test; i++) {
+        input >> din;
+        quantity[din]++;
+        if ((*mostProbableDigits)[i] == din) {
+            hits[din]++;
+            totalHits++;
+        }
+    }
+
+    input.close();
+
+    std::ofstream output;
+    output.open(filePath);
+
+    output << "Overall accuracy: " << 100 * totalHits / double(n_test) << "%\n";
+    std::cout << "Overall accuracy: " << 100 * totalHits / double(n_test) << "%\n";
+
+    for (unsigned i = 0; i < 10; i++) {
+        output << "Accuracy for digit " << i << ": ";
+        std::cout << "Accuracy for digit " << i << ": ";
+
+        if(double(quantity[i]) >= 1.0) { 
+            output << 100 * double(hits[i]) / double(quantity[i]) << "%\n";
+            std::cout << 100 * double(hits[i]) / double(quantity[i]) << "%\n";
+
+        }
+        else {
+            output << "No digit tested\n";
+            std::cout << "No digit tested\n";
+        }
     }
 }

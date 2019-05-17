@@ -35,7 +35,9 @@
         "ctime": "cpp",
         "iomanip": "cpp",
         "chrono": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "memory": "cpp",
+        "thread": "cpp"
     },
     "terminal.integrated.shell.windows": "cmd.exe",
     "C_Cpp.errorSquiggles": "Disabled"

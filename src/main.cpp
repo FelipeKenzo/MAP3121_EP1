@@ -152,7 +152,7 @@ void segundaTarefa(){
     
 }
 
-void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool multithreading){
+void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool multithreading, bool saveResult, bool saveWd, int seed){
 
     std::cout << "========== [Tarefa Principal] =========\n\n";
     auto tp_start = std::chrono::high_resolution_clock::now();
@@ -161,10 +161,11 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
 
     std::cout << "=======================================\n"
               << "n_digTreino: " << n_digTreino <<", p: " << p << ", n_test: " << n_test << "\n"
-              << "multi_threading: " << std::boolalpha << multithreading << "\n"
+              << "multi_threading: " << std::boolalpha << multithreading << ", seed: " << seed << "\n"
+              << "saveResult: " << std::boolalpha << saveResult << ", saveWd: " << saveWd << "\n" 
               << "=======================================\n";
 
-    //*** Training Phase ***//
+    //*** fase de treinamento ***//
 
     auto train_start = std::chrono::high_resolution_clock::now();
     std::cout << "Training started...\n";
@@ -195,8 +196,14 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
     std::chrono::duration<double> train_elapsed = train_finish - train_start;
     std::cout << "Finished. Elapsed time: " << train_elapsed.count() <<"\n\n";
 
-    for (int i = 0; i < 10; i++) {
-        (*classificators[5]).saveParameterMatrix("dig5_" + std::to_string(i) + ".txt", i);
+    /*----- Salva os parâmetros de cada Wd !-----*/
+    if (saveWd) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < p; j++) {
+                std::string filePath = "../parametros_wd/dig" + std::to_string(i) + "_" + std::to_string(j) + ".pgm";
+                (*classificators[i]).saveParameterMatrix(filePath, j);
+            }
+        }
     }
 
     //*** classification Phase ***//
@@ -216,9 +223,16 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
     
     std::cout << "Finished. Elapsed time: " << test_elapsed.count() <<"\n";
     
-    std::cout << "---Results: \n";
+    std::cout << "\n---Results: \n";
 
-    tester.results();
+    /*-----! Salva os resultados !-----*/
+    if (saveResult) {
+        std::string filePath = "nt" + std::to_string(n_digTreino) + "p" + std::to_string(p) + ".txt";
+        tester.results("../resultados/" + filePath);
+    }
+    else {
+        tester.results();
+    }
 
     auto tp_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> tp_elapsed = tp_finish - tp_start;
@@ -234,6 +248,9 @@ int main(int argc, char* argv[]) {
     unsigned n_digTreino, n_test, p;
     bool arguments[3] = {false, false, false};
     bool assignments[3] = {true, true, true};
+    bool saveResult = false;
+    bool saveWd = false;
+    int seed = 1;
 
     if (argc > 1) {
         for (int i = 1; i < argc; i++) {
@@ -290,6 +307,21 @@ int main(int argc, char* argv[]) {
                     return 1;
                 }
             }
+            else if (arg == "-sr") {
+                saveResult = true;
+            }
+            else if (arg == "-swd") {
+                saveWd = true;
+            }
+            else if (arg == "-seed") {
+                if (i + 1 < argc) {
+                    seed = std::stoi(argv[++i], nullptr, 0);
+                }
+                else {
+                    std::cerr << "-seed requires a parameter" << std::endl;
+                    return 1;
+                }
+            }
             else {
                 std::cerr << "invalid argument(s)." << std::endl;
                 return 1;
@@ -324,12 +356,14 @@ int main(int argc, char* argv[]) {
             std::cin >> p;
         }
 
-        try {
-            tarefaPrincipal(n_digTreino, n_test, p, multi);
-        }catch (std::invalid_argument* e) {
-            std::cout << "Erro: " << e->what() << "\n";
-            std::cout << __LINE__ << __FILE__ << "\n";
-        }
+        else {
+            try {
+                tarefaPrincipal(n_digTreino, n_test, p, multi, saveResult, saveWd, seed);
+            }catch (std::invalid_argument* e) {
+                std::cout << "Erro: " << e->what() << "\n";
+                std::cout << __LINE__ << __FILE__ << "\n";
+            }
+        }        
     }
 
     auto t_finish = std::chrono::high_resolution_clock::now();

@@ -18,6 +18,7 @@ class Tester{
         void test(unsigned n_test, unsigned p);//Same p used in trainning
         
         void results();
+        void results(const std::string& filePath);
 
     private:
         unsigned n_test = 0;
