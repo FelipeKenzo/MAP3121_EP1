@@ -18,15 +18,25 @@ Para rodar o EP, basta abrir o executável (`bin/./map3121_ep1`). Por *default*,
 
 Algumas *flags* foram implementadas por motivo de conveniência. São elas: 
 ```
-  -nt                     - Recebe como parâmetro o n_digTreino.
-  -nc                     - Recebe como parâmetro o n_digTeste.
-  -p                      - Recebe como parâmetro o p.
+  -nt n_digTreino         - Recebe como parâmetro o inteiro n_digTreino.
+  -nc n_digTeste          - Recebe como parâmetro o inteiro n_digTeste.
+  -p p                    - Recebe como parâmetro o  inteiro p.
                             Cada flag de parâmetro utilizada pula a entrada de dados correspondente em runtime.
                           
-  -a                      - Recebe como parâmetro o número da atividade (1, 2 ou 3)
+  -a n                    - Recebe como parâmetro o número n da atividade (1, 2 ou 3)
                             Utilizar para rodar apenas *uma* atividade!
                             
-  -mt, -multithreading    - Ativa computação paralela na fase de treinamento.
+  -mt, -multithreading    - Ativa a computação paralela na fase de treinamento.
+  
+  -seed n                 - Recebe como parâmetro a seed para gerar a matriz Wd.
+  
+  -sr                     - Salva os resultados da classificação em um .txt
+                            O nome do arquivo será ntXpXX.txt, em que X corresponde ao n_digTreino e XX ao p.
+                            !*Necessário que exista a pasta /resultados *!
+                            
+  -swd                    - Salva os parâmtros de cada matriz Wd após o treinamento em um .pgm
+                            O nome do arquivo será digX_XX.pgm, em que X corresponde ao dígito e XX a qual coluna da Wd.
+                            !* Necessário que exista a pasta /parametros_Wd *!
 ```
 ### Exemplo de uso:
 
@@ -50,7 +60,7 @@ n_digTeste:  10000
 p: 15
 ```
 
-Foram obtidos os seguintes resultados:
+Foram obtidos os seguintes resultados: --atualizar!
 
 | Multi-Threading | Tempo de Execução | Memória consumida |
 |:---------------:|:-----------------:|:-----------------:|
