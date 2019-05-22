@@ -12,8 +12,8 @@
 #include "../include/Tester.h"
 
 ///***-------------------------------------------------------***///
-///***------------- FUNCTIONS DECLARATIONS ------------------***///
-///***------------ Main function at line 234 ----------------***///
+///***------------- Declaração das Funções ------------------***///
+///***----------Função main começa na linha 243 -------------***///
 ///***-------------------------------------------------------***///
 
 void primeiraTarefa(){
@@ -40,11 +40,12 @@ void primeiraTarefa(){
         }
     }
 
-    //w_a->print(0);
+    w_a->print(0);
 
     Matrix* x_a = solveLinearSystems(w_a, b_a);
     std::cout << "x_a:";
     x_a->print(5);
+    x_a->saveAsVectors("x_a.txt");
 
     delete w_a;
     delete b_a;
@@ -65,10 +66,17 @@ void primeiraTarefa(){
         }
     }
 
+    w_b->print(5);
+
     Matrix* x_b = solveLinearSystems(w_b, b_b);
 
     std::cout << "x_b:";
     x_b->print(5);
+    x_b->saveAsVectors("x_b.txt");
+
+    delete w_b;
+    delete b_b;
+    delete x_b;
 
     std::cout << "c)\n\n";
 
@@ -92,6 +100,11 @@ void primeiraTarefa(){
     Matrix* x_c = solveLinearSystems(w_c, b_c);
     std::cout << "x_c:";
     x_c->print(5);
+    x_c->saveAsVectors("x_c.txt");
+
+    delete w_c;
+    delete b_c;
+    delete x_c;
 
     std::cout << "d)\n\n";
 
@@ -113,6 +126,11 @@ void primeiraTarefa(){
     Matrix* x_d = solveLinearSystems(w_d, b_d);
     std::cout << "x_d:";
     x_d->print(5);
+    x_d->saveAsVectors("x_d.txt");
+
+    delete w_d;
+    delete b_d;
+    delete x_d;
 
     auto t1_finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> t1_elapsed = t1_finish - t1_start;
@@ -165,7 +183,7 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
               << "saveResult: " << std::boolalpha << saveResult << ", saveWd: " << saveWd << "\n" 
               << "=======================================\n";
 
-    //*** fase de treinamento ***//
+    //*** Fase de treinamento ***//
 
     auto train_start = std::chrono::high_resolution_clock::now();
     std::cout << "Training started...\n";
@@ -206,7 +224,7 @@ void tarefaPrincipal(unsigned n_digTreino, unsigned n_test, unsigned p, bool mul
         }
     }
 
-    //*** classification Phase ***//
+    //*** Fase de classificação ***//
 
     auto test_start = std::chrono::high_resolution_clock::now();
     std::cout << "Classification started...\n";
@@ -356,14 +374,12 @@ int main(int argc, char* argv[]) {
             std::cin >> p;
         }
 
-        else {
-            try {
-                tarefaPrincipal(n_digTreino, n_test, p, multi, saveResult, saveWd, seed);
-            }catch (std::invalid_argument* e) {
-                std::cout << "Erro: " << e->what() << "\n";
-                std::cout << __LINE__ << __FILE__ << "\n";
-            }
-        }        
+        try {
+            tarefaPrincipal(n_digTreino, n_test, p, multi, saveResult, saveWd, seed);
+        }catch (std::invalid_argument* e) {
+            std::cout << "Erro: " << e->what() << "\n";
+            std::cout << __LINE__ << __FILE__ << "\n";
+        }    
     }
 
     auto t_finish = std::chrono::high_resolution_clock::now();

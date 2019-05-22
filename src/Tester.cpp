@@ -20,11 +20,11 @@ void Tester::test(unsigned n_test, unsigned p){
     Matrix* h = new Matrix(p, n_test);
     Matrix* c = new Matrix(784, n_test);
     
-    Matrix* a_test = new Matrix(784, n_test); //Copy of A containing only the n_test relevant columns
+    Matrix* a_test = new Matrix(784, n_test); //Cópia de A contendo apenas as n_test colunas necessárias
     
     Matrix* Wd_test = new Matrix (784, p);
 
-    //Copies the a_test from a
+    //Copia a_test da a
         for(unsigned i = 1; i <= 784; i++){
             for(unsigned j = 1 ; j <= n_test; j++){
                 a_test->setValue(i,j, a->at(i,j)); 
@@ -44,10 +44,10 @@ void Tester::test(unsigned n_test, unsigned p){
        
         c_norm = 0;        
 
-        //Modifies wd and a_test 
+        //Esse processo modifica h e a
         h = solveLinearSystems(Wd_test, a_test);
 
-        //Copies the a_test again due to modification
+        //Recopia a matriz a_teste
         for(unsigned i = 1; i <= 784; i++){
             for(unsigned j = 1 ; j <= n_test; j++){
                 a_test->setValue(i,j, a->at(i,j)); 
@@ -107,14 +107,14 @@ void Tester::results()
 
     input.close();
 
-    std::cout << "Overall accuracy: " << 100 * totalHits / double(n_test) << "%\n";
+    std::cout << "Taxa de acertos total: " << 100 * totalHits / double(n_test) << "%\n";
 
     for (unsigned i = 0; i < 10; i++) {
-        std::cout << "Accuracy for digit " << i << ": ";
+        std::cout << "Taxa de acertos do dig. " << i << ": ";
         if(double(quantity[i]) >= 1.0) 
             std::cout << 100 * double(hits[i]) / double(quantity[i]) << "%\n";
         else
-            std::cout << "No digit tested\n";
+            std::cout << "Nenhum dig. testado\n";
     }
 
 }
@@ -149,12 +149,12 @@ void Tester::results(const std::string& filePath)
     std::ofstream output;
     output.open(filePath);
 
-    output << "Overall accuracy: " << 100 * totalHits / double(n_test) << "%\n";
-    std::cout << "Overall accuracy: " << 100 * totalHits / double(n_test) << "%\n";
+    output << "Taxa de acertos total: " << 100 * totalHits / double(n_test) << "%\n";
+    std::cout << "Taxa de acertos total: " << 100 * totalHits / double(n_test) << "%\n";
 
     for (unsigned i = 0; i < 10; i++) {
-        output << "Accuracy for digit " << i << ": ";
-        std::cout << "Accuracy for digit " << i << ": ";
+        output << "Taxa de acertos dig. " << i << ": ";
+        std::cout << "Taxa de acertos dig. " << i << ": ";
 
         if(double(quantity[i]) >= 1.0) { 
             output << 100 * double(hits[i]) / double(quantity[i]) << "%\n";

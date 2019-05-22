@@ -9,18 +9,20 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 
 class Matrix
 {
 public:
-    Matrix(unsigned n, unsigned m); // initializes a MxN matrix filled with zeroes.
-    Matrix(unsigned n, unsigned m, double initial); // initializes a MxN matrix filled with an initial value.
-    Matrix(std::vector<std::vector<double>*>* values); // initializas a matrix with pre established values stored in a vector container.
-    Matrix(std::string filePath, unsigned n);
+    Matrix(unsigned n, unsigned m); // Inicializa a matriz com zeros
+    Matrix(unsigned n, unsigned m, double initial); // Inicializa a matriz tamanho N x M com um valor inicial.
+    Matrix(std::vector<std::vector<double>*>* values); // Inicializa a matriz com valores preestabelecidos em um vector.
+    Matrix(std::string filePath, unsigned n); // Inicializa uma matriz com 748 x n a partir de um arquivo
     ~Matrix();
 
-    void print(unsigned precision); // maximum matrix size is 9x9. It is pretty slow.
+    void print(unsigned precision); // Tamanho máximo 9x9. Bem lento
+    void saveAsVectors(const std::string& filePath);
 
     void setValue(unsigned n, unsigned m, double newValue);
     void setRow(unsigned n, std::vector<double>* newRow);
@@ -35,7 +37,7 @@ public:
     unsigned getNumberOfLines();
     unsigned getNumberOfColumns();
 
-    // Operations
+    // Operações
     void transpose(); //naive algorithm, O(n²)
    
 
@@ -47,8 +49,8 @@ public:
 
 
 private:
-    unsigned n; // number of lines
-    unsigned m; // number of columns
+    unsigned n; // Número de linhas
+    unsigned m; // Número de Colunas
 
     std::vector<std::vector<double>*>* values;
 };

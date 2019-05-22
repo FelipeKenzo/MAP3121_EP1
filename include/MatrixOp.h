@@ -2,7 +2,7 @@
 #define MATRIXOP_H
 
 /*
-    Definitions for the Matrix Operations package
+    Definições para o pacote de operações MatrixOp
 */
 
 #include <chrono>
@@ -10,15 +10,15 @@
 
 #include "../include/Matrix.h"
 
-    /** Returns cos and sin parameters used in Givens rotation linear operator **/
+    /** Retorna os parâmetros cosseno e seno usados na Rotação de Givens **/
     double* getRGParameters(Matrix* w, unsigned i, unsigned j, unsigned k); 
     
     void rotGivens(Matrix* w, unsigned i, unsigned j, double c, double s); 
 
-    /** Returns R matrix produced by QR factorization */
+    /** Retorna a matriz R produzida pela fatoração QR **/
     void qrFactorization(Matrix* w);
 
-    // Returns an R matrix which is the best solution for W * X = B
+    /** Retorna a matriz R que é a melhor solução para W * X = B **/
     Matrix* solveLinearSystems(Matrix* w, Matrix* a);
 
     Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p);

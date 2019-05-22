@@ -114,9 +114,9 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
     unsigned n = a->getNumberOfLines();
 
     Matrix* w  = new Matrix(n, p);
-    Matrix* h;  // must be deleted;
-    Matrix* wt; // must be deleted;
-    Matrix* a2 = new Matrix(n, m); // must be deleted
+    Matrix* h;  // Deve ser deletado;
+    Matrix* wt; // Deve ser deletado;
+    Matrix* a2 = new Matrix(n, m); // Deve ser deletado
 
     /*-----! Inicialização aleatória da matriz Wd !-----*/
 
@@ -159,11 +159,13 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
         /*-----!      Redefinição de h       !------*/
         for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
             for(unsigned j = 1; j <= h->getNumberOfColumns(); j++){                
-                if(h->at(i,j) < -eps){                
+                if(h->at(i,j) < 0){                
                     h->setValue(i, j, 0); 
                 }
             }                
         }
+
+        //h->print(5);
 
         /*-----! Computação de A original transposta  !-----*/
         //reseta os valores de a2 aos da matriz original.
@@ -176,15 +178,23 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
 
     
         /*-----!      MMQ das Transpostas    !-----*/
+
+        Matrix* ht = new Matrix(h->getNumberOfColumns(), h->getNumberOfLines());
+
+        for (unsigned i = 1; i <= h->getNumberOfLines(); i++){
+            for(unsigned j = 1; j <= h->getNumberOfColumns(); j++){                
+                ht->setValue(j, i, h->at(i,j));
+            }                
+        }
         
         a2->transpose();
-        h->transpose();
 
-        wt = solveLinearSystems(h, a2);
+        wt = solveLinearSystems(ht, a2);
 
-        h->transpose();
+        delete ht;
+
         /*-----!      Computação de w        !-----*/
-        wt->transpose(); //Destranspõe W transposta
+        wt->transpose(); //Detranspõe W transposta
 
         delete w;
         w = wt;
@@ -198,12 +208,12 @@ Matrix* nonNegativeFactorization(Matrix* a, unsigned m, unsigned p)
             }
         }                
         
-        //Calculating error
+        //Calculando o erro
         //*
 
         Matrix* wxh = (*w) * h;
+        //h->print(5);
         delete h;
-        //std::cout << "oi\n";
 
         double newErr = 0;
         

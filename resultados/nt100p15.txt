@@ -1,11 +1,11 @@
-Overall accuracy: 9.8%
-Accuracy for digit 0: 100%
-Accuracy for digit 1: 0%
-Accuracy for digit 2: 0%
-Accuracy for digit 3: 0%
-Accuracy for digit 4: 0%
-Accuracy for digit 5: 0%
-Accuracy for digit 6: 0%
-Accuracy for digit 7: 0%
-Accuracy for digit 8: 0%
-Accuracy for digit 9: 0%
+Taxa de acertos total: 90.57%
+Taxa de acertos dig. 0: 98.3673%
+Taxa de acertos dig. 1: 99.2952%
+Taxa de acertos dig. 2: 89.7287%
+Taxa de acertos dig. 3: 84.4554%
+Taxa de acertos dig. 4: 87.8819%
+Taxa de acertos dig. 5: 84.6413%
+Taxa de acertos dig. 6: 95.4071%
+Taxa de acertos dig. 7: 94.2607%
+Taxa de acertos dig. 8: 80.3901%
+Taxa de acertos dig. 9: 89.4945%

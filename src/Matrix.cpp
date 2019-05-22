@@ -69,7 +69,7 @@ Matrix::Matrix(std::string filePath, unsigned n) {
     unsigned lineCount = 0;
     unsigned columnCount = 0;
 
-    //counts number of columns
+    //Conta o número de colunas
     std::string firstLine;
     std::getline(input, firstLine);
     
@@ -78,7 +78,7 @@ Matrix::Matrix(std::string filePath, unsigned n) {
             columnCount++;
     }
 
-    //allocates necessary space
+    //Aloca o espaço necessário
     values->resize(n);
     for (unsigned i = 0; i < values->size(); i++)
     {
@@ -115,14 +115,14 @@ Matrix::~Matrix()
 {
     for (unsigned i = 0; i < values->size(); i++)
     {
-        //releasing memory
+        //Liberando a Memória
         std::vector<double> empty{};
         (*(*values)[i]).swap(empty);
 
         delete (*values)[i];
     }
 
-    //releasing memory
+    //Liberando a memória
     std::vector<std::vector<double>*> empty{};
     (*values).swap(empty);
     
@@ -219,6 +219,25 @@ void Matrix::print(unsigned precision)
     std::cout << "\n\n";
 }
 
+void Matrix::saveAsVectors(const std::string& filePath) {
+    std::ofstream output;
+    output.open(filePath);
+
+    for (unsigned j = 0; j < m; j++) { //percorre colunas
+        for (unsigned i = 0; i < n; i++) {
+            if (fabs((*(*values)[i])[j]) < eps) {
+                output << double(0) << ", ";
+            }
+            else {
+                output << (*(*values)[i])[j] << ", ";
+            }
+        }
+        output << "\n";
+    }
+
+    output.close();
+}
+
 void Matrix::setValue(unsigned n, unsigned m, double newValue)
 {
     if (n > this->n || m > this->m)
@@ -311,7 +330,7 @@ void Matrix::transpose()
 {
     std::vector<std::vector<double>*>* tValues= new std::vector<std::vector<double>*>();
     
-    //Allocates new vector<vector>
+    //Aloca um novo vector<vector>
     tValues->resize(m);
     for (unsigned i = 0; i < m; i++) {
         (*tValues)[i] = new std::vector<double>();
@@ -326,9 +345,9 @@ void Matrix::transpose()
         }
     }
 
-    //freeing memory from old vector<vector>
+    //Liberando a memória do antigo vector<vector>
         for (unsigned i = 0; i < values->size(); i++) {
-        //releasing memory
+        //Libernado a memória
         std::vector<double> empty{};
         (*(*values)[i]).swap(empty);
 
@@ -336,7 +355,7 @@ void Matrix::transpose()
 
         delete (*values)[i];
     }
-    //releasing memory
+    //Liberando a memória
     std::vector<std::vector<double>*> empty{};
     (*values).swap(empty);
     
@@ -358,7 +377,7 @@ Matrix* Matrix::operator+(Matrix* M)
     if (M->getNumberOfLines() != n || M->getNumberOfColumns() != m)
         throw new std::invalid_argument("incompatible dimensions");
 
-    Matrix* sum = new Matrix(n, m);// = new Matrix(n, m);
+    Matrix* sum = new Matrix(n, m); 
 
     for (unsigned i = 1; i <= n; i++)
     {
@@ -378,7 +397,7 @@ Matrix* Matrix::operator-(Matrix* M)
         throw new std::invalid_argument("incompatible dimensions");
     }
 
-    Matrix* sub = new Matrix(n, m);// = new Matrix(n, m);
+    Matrix* sub = new Matrix(n, m);
 
     for (unsigned i = 1; i <= n; i++)
     {

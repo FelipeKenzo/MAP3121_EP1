@@ -15,7 +15,7 @@ class Tester{
         Tester(std::string testFilePath, std::string verificationFilePath, Classificator* classificators[10]);
         ~Tester();
 
-        void test(unsigned n_test, unsigned p);//Same p used in trainning
+        void test(unsigned n_test, unsigned p);//Mesmo p usado no treinamento
         
         void results();
         void results(const std::string& filePath);

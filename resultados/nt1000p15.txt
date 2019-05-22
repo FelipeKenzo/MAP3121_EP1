@@ -1,0 +1,11 @@
+Taxa de acertos total: 93.09%
+Taxa de acertos dig. 0: 98.7755%
+Taxa de acertos dig. 1: 99.3833%
+Taxa de acertos dig. 2: 92.2481%
+Taxa de acertos dig. 3: 91.2871%
+Taxa de acertos dig. 4: 92.3625%
+Taxa de acertos dig. 5: 89.1256%
+Taxa de acertos dig. 6: 96.5553%
+Taxa de acertos dig. 7: 91.7315%
+Taxa de acertos dig. 8: 87.7823%
+Taxa de acertos dig. 9: 90.5847%
